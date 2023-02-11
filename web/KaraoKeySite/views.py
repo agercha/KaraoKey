@@ -31,6 +31,11 @@ def quick_enter(request):
   login(request, admin)
   return render(request, 'KaraoKeySite/home.html',  {})
 
+def welcome(request):
+    context = {}
+
+    return render(request, 'KaraoKeySite/welcome.html',  context)
+
 def login_action(request):
     context = {}
 

@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-LOGIN_URL = 'login'
+LOGIN_URL = 'welcome'
 
 INSTALLED_APPS = [
     'KaraoKeySite',

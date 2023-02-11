@@ -1,0 +1,80 @@
+/* Desktop - 15 */
+body {
+  background: #F2D8FF;
+}
+
+/* KaraoKey */
+
+#id_site_logo {
+
+  font-family: 'Sunset Club Free Trial'; /* download this font */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 250px;
+  line-height: 280px;
+  text-align: center;
+
+  color: #e1fffd;
+  text-shadow: 0 0 10px #00cec1;
+
+}
+
+/* Sign Up Box */
+
+#id_register_button {
+  position: relative;
+  width: 200px;
+  height: 50px;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
+
+/* Sign Up */
+#id_register_link {
+  /*none for now */
+}
+
+
+/* Login Box */
+
+#id_login_button {
+  position: relative;
+  width: 200px;
+  height: 50px;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #FFB0F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
+
+/* Login */
+
+#id_login_link {
+  /*none for now */
+}
+
+.reg_login {
+  text-align: center;
+}
+
+.reg_login_text {
+  margin: auto;
+  
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  
+  color: #000000;
+}

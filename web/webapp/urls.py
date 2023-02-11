@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name="home"), # song select
     path('login', views.login_action, name='login'),
+    path('welcome', views.welcome, name='welcome'),
     path('logout', views.logout_action, name='logout'),
     path('register', views.register_action, name='register'),
     path('quick_enter', views.quick_enter, name='quick_enter'),
