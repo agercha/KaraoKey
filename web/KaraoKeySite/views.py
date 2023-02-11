@@ -12,6 +12,25 @@ from KaraoKeySite.forms import *
 def home(request):
   return render(request, 'KaraoKeySite/home.html', {})
 
+def quick_enter(request):
+  if not User.objects.filter(username="admin").exists():
+    admin = User.objects.create_user(username="admin", 
+                                        password="password",
+                                        email="user@aol.com",
+                                        first_name="admin",
+                                        last_name="user")
+    admin.save()
+    admin_profile = Profile(user=admin, 
+                            first_name="admin",
+                            last_name="user")
+    admin_profile.save()
+  else: 
+    admin = User.objects.get(username="admin")
+
+  admin = authenticate(username="admin", password="password")
+  login(request, admin)
+  return render(request, 'KaraoKeySite/home.html',  {})
+
 def login_action(request):
     context = {}
 
@@ -27,13 +46,13 @@ def login_action(request):
 
     # Validates the form.
     if not form.is_valid():
-        return render(request, 'KaraoKeySite3/login.html', context)
+        return render(request, 'KaraoKeySite/login.html', context)
 
     new_user = authenticate(username=form.cleaned_data['username'],
                             password=form.cleaned_data['password'])
 
     login(request, new_user)
-    return render(request, 'KaraoKey/home.html',  context)
+    return render(request, 'KaraoKeySite/home.html',  context)
 
 def register_action(request):
   context = {}
@@ -63,12 +82,9 @@ def register_action(request):
   new_user = authenticate(username=form.cleaned_data['username'],
                           password=form.cleaned_data['password'])
 
-  # new_pfp = PFP(pfp_user=form.cleaned_data['username'])
-  # new_pfp.save()
   new_user_profile = Profile(user=new_user, 
                             first_name=form.cleaned_data['first_name'],
-                            last_name=form.cleaned_data['last_name'],
-                            bio="")
+                            last_name=form.cleaned_data['last_name'])
   new_user_profile.save()
 
   login(request, new_user)
