@@ -1,0 +1,55 @@
+{% extends "KaraoKeySite/base.html" %}
+
+{% block title %} KaraoKey {% endblock %}
+
+{% block page-name %}
+{% endblock %}
+
+{% block page-content %}
+<div id="id_header_div">
+  <div id="id_site_name">
+    KaraoKey          
+  </div>
+  <a href="{% url 'welcome' %}" id="id_nav_logout" class="header_button">
+    logout
+  </a> 
+</div>
+<div id="main">
+  <h1>We are currently playing {{title}}</h1>
+  <audio controls>
+    <source src="{{title}}.mp3"  type="audio/mpeg">
+    <source src="{{title}}.wav"  type="audio/wav">
+    <source src="{{title}}.ogg"  type="audio/ogg">
+    your browser can't handle audio :(
+  </audio>
+
+  <!-- https://hvitis.dev/how-to-code-simple-like-soundcloud-javascript-audio-player-with-django-tutorial -->
+  <!-- <div id="waveform"></div>
+  <button
+    id="play"
+    class="pure-button pure-button-secondary"
+    onclick="startRecording()"
+  >
+    <i class="fa fa-play-circle"></i> Play
+  </button>
+  <button
+    id="pause"
+    class="pure-button pure-button-secondary"
+    onclick="pauseRecording()"
+  >
+    <i class="fa fa-pause"></i> Pause
+  </button>
+  <button
+    id="stop"
+    class="pure-button pure-button-primary"
+    onclick="stopRecording()"
+  >
+    <i class="fa fa-stop"></i> Stop
+  </button>
+  <script>
+    // Uhh.. nothing fancy so far.. starts boring but here it goes - the core script!
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.53/wavesurfer.min.js"></script> -->
+</div>
+
+{% endblock %}

@@ -25,5 +25,6 @@ urlpatterns = [
     path('logout', views.logout_action, name='logout'),
     path('register', views.register_action, name='register'),
     path('quick_enter', views.quick_enter, name='quick_enter'),
+    path('song/<str:song>', views.game, name="song")
 ]
 3

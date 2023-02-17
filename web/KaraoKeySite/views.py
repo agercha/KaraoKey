@@ -98,3 +98,9 @@ def register_action(request):
 def logout_action(request):
   logout(request)
   return redirect(reverse('login'))
+
+@login_required
+def game(request, song):
+  context = {"title": f'../../static/KaraoKeySite/songs/{song}'}
+  print(context["title"])
+  return render(request, "KaraoKeySite/game.html", context)
