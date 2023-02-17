@@ -1,13 +1,19 @@
 /* Desktop - 15 */
 body {
   background: #F2D8FF;
+  margin-top: 50px;
+  font-family: 'Inter';
+}
+@font-face {
+  font-family: SunsetClub;
+  src: url(SunsetClub.ttf);
 }
 
 /* KaraoKey */
 
 #id_site_logo {
 
-  font-family: 'Sunset Club Free Trial'; /* download this font */
+  font-family: SunsetClub; /* download this font */
   font-style: normal;
   font-weight: 400;
   font-size: 250px;
@@ -78,3 +84,4 @@ body {
   
   color: #000000;
 }
+
