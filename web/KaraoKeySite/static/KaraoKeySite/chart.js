@@ -42,7 +42,8 @@ window.onload =  function() {
       data: [3.6, 8.51, 9.38, 6.66, 1.1, 2, 6.5],
       fill: true,
       borderColor: 'white',
-      tension: 0
+      tension: 0,
+      gridline
     }]
   };
   

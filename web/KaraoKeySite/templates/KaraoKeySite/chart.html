@@ -6,26 +6,11 @@
 {% endblock %}
 
 {% block page-content %}
-<div id="id_header_div">
-  <div id="id_site_name">
-    KaraoKey          
-  </div>
-  <a href="{% url 'welcome' %}" id="id_nav_logout" class="header_button">
-    logout
-  </a> 
-</div>
 <div id="main">
   <div>
     <canvas id="myChart"></canvas>
   </div>
   
 </div>
-
-<!-- <script>
-  var fs = require("fs");
-  var text = fs.readFileSync("../../static/KaraoKeySite/utils.js")
-  var textByLine = text.split("\n")
-  console.log(textByLine);
-</script> -->
 
 {% endblock %}
