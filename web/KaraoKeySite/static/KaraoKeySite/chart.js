@@ -43,7 +43,6 @@ window.onload =  function() {
       fill: true,
       borderColor: 'white',
       tension: 0,
-      gridline
     }]
   };
   
