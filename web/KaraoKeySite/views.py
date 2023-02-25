@@ -12,6 +12,9 @@ from KaraoKeySite.forms import *
 def home(request):
   return render(request, 'KaraoKeySite/home.html', {})
 
+def dummy_chart(request):
+  return render(request, 'KaraoKeySite/chart.html', {})
+
 def quick_enter(request):
   if not User.objects.filter(username="admin").exists():
     admin = User.objects.create_user(username="admin", 
