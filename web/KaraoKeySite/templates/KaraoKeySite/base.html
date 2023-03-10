@@ -5,10 +5,8 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/static/KaraoKeySite/karaokey.css">
   <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- <script type="module" src="../../static/KaraoKeySite/utils.js"></script> -->
-  <script type="module" src="../../static/KaraoKeySite/chart.js"></script>
+  {% block js-src %}{% endblock %}
 
   {% load static %}
 </head>
@@ -18,4 +16,5 @@
   </div>
 
 </body>
+{% block js-content %}{% endblock %}
 </html>

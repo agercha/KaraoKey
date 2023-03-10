@@ -15,6 +15,9 @@ def home(request):
 def dummy_chart(request):
   return render(request, 'KaraoKeySite/chart.html', {})
 
+def dummy_record(request):
+  return render(request, 'KaraoKeySite/record.html', {})
+
 def quick_enter(request):
   if not User.objects.filter(username="admin").exists():
     admin = User.objects.create_user(username="admin", 
