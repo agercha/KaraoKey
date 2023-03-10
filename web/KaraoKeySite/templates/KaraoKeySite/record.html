@@ -10,22 +10,25 @@
 {% block page-content %}
   <h1> MediaRecorder API example</h1>
 
-  <div id='gUMArea'>
-    <div>
-    Record:
-      <input type="radio" name="media" value="video" checked id='mediaVideo'>Video
-      <input type="radio" name="media" value="audio">audio
-    </div>
-    <button class="btn btn-default"  id='gUMbtn'>Request Stream</button>
+  <div id='selection_area'>
+    <button id='request_button'>Request Stream</button>
   </div>
-  <div id='btns'>
-    <button  class="btn btn-default" id='start'>Start</button>
-    <button  class="btn btn-default" id='stop'>Stop</button>
+
+  <div id='buttons_area'>
+    <button id='start' disabled="disabled">start</button>
+    <button id='stop' disabled="disabled">stop</button>
   </div>
+
   <div>
-    <ul  class="list-unstyled" id='ul'></ul>
+    <ul  id='ul'></ul>
   </div>
+
+  <div id="result">
+    no current recording
+  </div>
+
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="../../static/KaraoKeySite/record.js"></script>
+
 {% endblock %}
