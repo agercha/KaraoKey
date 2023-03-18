@@ -23,6 +23,6 @@ while True:
     samples, read = s()
     pitch = aubioPitch(samples)[0]
     confidence = aubioPitch.get_confidence()
-    print(f"{total_frames/float(pitch, confidence)} {pitch} {confidence}")
+    print(f"{total_frames/float(samplerate)} {pitch} {confidence}")
     total_frames += read
     if read < frames: break
