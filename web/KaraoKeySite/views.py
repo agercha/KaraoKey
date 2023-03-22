@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import HttpResponse, render, redirect
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
@@ -6,7 +6,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from KaraoKeySite.forms import *
 
-# Create your views here.
+import json, time
+
+def get_pitch(request):
+  # right now, just return datetime
+  
+  # FOR KELLY!
+  #request.FILES.get['small_recorded_audio'] is the wav file!
+  full_audio_file = request.FILES.get("full_recorded_audio")
+  small_audio_file = request.FILES.get("small_recorded_audio")
+
+  t = time.localtime()
+  current_time = time.strftime("%H:%M:%S", t)
+  response = []
+  response.append({'curr_pitch': current_time}) # change this!
+  response_json = json.dumps(response)
+  response_to_send = HttpResponse(response_json, content_type='application/json')
+  response_to_send['Access-Control-Allow-Origin'] = '*'
+  return response_to_send
 
 @login_required
 def home(request):

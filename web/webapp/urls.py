@@ -27,5 +27,6 @@ urlpatterns = [
     path('quick_enter', views.quick_enter, name='quick_enter'),
     path('song/<str:song>', views.game, name="song"),
     path('chart', views.dummy_chart, name="chart"),
-    path('record', views.dummy_record, name="record")
+    path('record', views.dummy_record, name="record"),
+    path('get-pitch', views.get_pitch, name="get_pitch"),
 ]
