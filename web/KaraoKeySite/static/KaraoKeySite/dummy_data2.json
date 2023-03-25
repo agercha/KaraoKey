@@ -1,0 +1,56 @@
+[
+    {
+        "length": 10,
+        "vals": [
+            0.5,
+            0.6,
+            1.2,
+            1.1,
+            1.3,
+            1.5,
+            0.8,
+            0.7,
+            0.4,
+            0.5
+        ],
+        "lyrics" : "Somebody once told me the world is gonna roll me"
+    },
+    {
+        "length": 7,
+        "vals": [
+            1.5,
+            1.6,
+            1.1,
+            1.7,
+            1.1,
+            0.7,
+            0.5
+        ],
+        "lyrics" : "I ain't the sharpest tool in the shed"
+    },
+    {
+        "length": 5,
+        "vals": [
+            0.7,
+            0.6,
+            0.8,
+            1.3,
+            1.5
+        ],
+        "lyrics" : "She was looking kind of dumb with her finger and her thumb"
+    },
+    {
+        "length": 8,
+        "vals": [
+            0.4,
+            0.7,
+            1.5,
+            0.8,
+            0.7,
+            0.8,
+            1.3,
+            1.4
+        ],
+        "lyrics" : "In the shape of an L on her forehead"
+    }
+]

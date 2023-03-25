@@ -29,4 +29,6 @@ urlpatterns = [
     path('chart', views.dummy_chart, name="chart"),
     path('record', views.dummy_record, name="record"),
     path('get-pitch', views.get_pitch, name="get_pitch"),
+    path('get-json', views.get_json, name="get_json"),
+    path('get-chart-json', views.get_chart_json, name="get_chart_json"),
 ]

@@ -6,7 +6,62 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from KaraoKeySite.forms import *
 
-import json, time
+from django.views.generic import TemplateView
+from chartjs.views.lines import BaseLineChartView
+
+import json, time, os
+
+COUNT = 0
+
+class chartJSON(BaseLineChartView):
+  def get_curr_vals(self):
+    with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data2.json", "r") as f:
+      response_json = json.load(f)
+
+    global COUNT
+    curr_vals = response_json[COUNT]
+    COUNT = (COUNT + 1)%len(response_json)
+    # print(curr_vals)
+    get_chart_json1()
+    return curr_vals
+
+
+  def get_labels(self):
+    """Return 7 labels for the x-axis."""
+    len = self.get_curr_vals()["length"]
+    return [str(i) for i in range(len)]
+
+  def get_providers(self):
+    """Return names of datasets."""
+    return [self.get_curr_vals()["lyrics"]]
+
+  def get_data(self):
+    """Return 1 dataset to plot."""
+    return [self.get_curr_vals()["vals"]]
+
+get_chart_json1 = chartJSON.as_view()
+
+def get_chart_json(request):
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data2.json", "r") as f:
+    response_json = json.load(f)
+  global COUNT
+  curr_vals = response_json[COUNT]
+  COUNT = (COUNT + 1)%len(response_json)
+  l = curr_vals["length"]
+  times = [str(i) for i in range(l)]
+  curr_vals['labels'] = times
+  curr_vals = json.dumps(curr_vals)
+  curr_vals = HttpResponse(curr_vals, content_type='application/json')
+  curr_vals['Access-Control-Allow-Origin'] = '*'
+  return curr_vals
+
+def get_json(request):
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data.json", "r") as f:
+    response_json = json.load(f)
+  response_json = json.dumps(response_json)
+  response_to_send = HttpResponse(response_json, content_type='application/json')
+  response_to_send['Access-Control-Allow-Origin'] = '*'
+  return response_to_send
 
 def get_pitch(request):
   # right now, just return datetime
