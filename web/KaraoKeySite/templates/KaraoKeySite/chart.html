@@ -34,6 +34,18 @@
     }
   };
 
+  const plugin = {
+    id: 'customCanvasBackgroundColor',
+    beforeDraw: (chart, args, options) => {
+      const {ctx} = chart;
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = options.color || '#99ffff';
+      ctx.fillRect(0, 0, chart.width, chart.height);
+      ctx.restore();
+    }
+  };
+
   var charty;
 
   function makeChart(xhr) {
@@ -41,17 +53,31 @@
     const data = {
       labels: vals["labels"],
       datasets: [{
-        data: vals["vals"],
-        fill: false,
-        tension: 0.1,
-        stepped: true
-      }]
+          data: vals["user"],
+          fill: false,
+          tension: 0.1,
+          stepped: true,
+          borderWidth: 5,
+        },
+        {
+          data: vals["target"],
+          fill: false,
+          tension: 0.1,
+          stepped: true,
+          borderWidth: 20,
+        },
+      ]
     }
     var ctx = $("#myChart").get(0).getContext("2d");
     return new Chart(ctx, {
         type: 'line', 
         data: data,
         options: {
+          elements: {
+              point:{
+                  radius: 0
+              }
+          },
           events: [],
           animation: {
             duration: 0
@@ -63,6 +89,9 @@
             axis: 'x'
           },
           plugins: {
+            customCanvasBackgroundColor: {
+              color: 'white',
+            },
             title: {
               display: true,
               text: vals["lyrics"],
@@ -97,7 +126,7 @@
             }
           }
         },
-        plugins: [chartAreaBorder]
+        plugins: [chartAreaBorder, plugin]
       });
   }
 
@@ -116,11 +145,20 @@
     const data = {
       labels: vals["labels"],
       datasets: [{
-        data: vals["vals"],
-        fill: false,
-        tension: 0.1,
-        stepped: true
-      }]
+          data: vals["user"],
+          fill: false,
+          tension: 0.1,
+          stepped: true,
+          borderWidth: 5,
+        },
+        {
+          data: vals["target"],
+          fill: false,
+          tension: 0.1,
+          stepped: true,
+          borderWidth: 20,
+        },
+      ]
     }
     charty.data = data;
     charty.options.plugins.title.text = vals["lyrics"];
@@ -139,7 +177,7 @@
 
   }
 
-  window.setInterval(myFunc, 3000);
+  window.setInterval(myFunc, 50);
 </script>
 
 {% endblock %}

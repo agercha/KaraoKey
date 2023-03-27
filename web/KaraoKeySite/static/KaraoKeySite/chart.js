@@ -1,4 +1,3 @@
-console.log("hiiisdjfl;dskj")
 
 const MONTHS = [
   'January',
