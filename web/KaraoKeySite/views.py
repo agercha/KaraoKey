@@ -4,7 +4,11 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout
+from KaraoKeySite.Pitch_detection import process_wav_output_pitch
 from KaraoKeySite.forms import *
+from django.core.files.storage import default_storage
+import wave
+
 
 import json, time
 
@@ -16,10 +20,19 @@ def get_pitch(request):
   full_audio_file = request.FILES.get("full_recorded_audio")
   small_audio_file = request.FILES.get("small_recorded_audio")
 
+  with default_storage.open('tmp/'+small_audio_file.name, 'wb+'):
+    wf = wave.open('tmp/'+small_audio_file.name, 'wb')
+    wf.setnchannels(1)
+    wf.setsampwidth(1)
+    wf.setframerate(44100)
+    wf.writeframes(full_audio_file.read())
+    wf.close()
+
   t = time.localtime()
   current_time = time.strftime("%H:%M:%S", t)
   response = []
-  response.append({'curr_pitch': current_time}) # change this!
+
+  response.append({'curr_pitch': process_wav_output_pitch('tmp/'+small_audio_file.name)})
   response_json = json.dumps(response)
   response_to_send = HttpResponse(response_json, content_type='application/json')
   response_to_send['Access-Control-Allow-Origin'] = '*'
