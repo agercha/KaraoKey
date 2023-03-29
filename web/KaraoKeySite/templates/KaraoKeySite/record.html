@@ -44,9 +44,10 @@
     //   xhttp.send();
     // }
     // setInterval(sendData(), 1000);
-    window.onload = sendData;
+    var FileWriter = require('wav').FileWriter;
 
-    window.setInterval(sendData, 1000);
+    // window.onload = sendData;
+    // window.setInterval(sendData, 1000);
   </script>
 
 {% endblock %}

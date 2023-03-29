@@ -10,7 +10,40 @@ from django.core.files.storage import default_storage
 import wave
 
 
-import json, time
+from django.views.generic import TemplateView
+from chartjs.views.lines import BaseLineChartView
+
+import json, time, os
+
+COUNT_OUTER = 0
+COUNT_INNER = 0
+
+def get_chart_json(request):
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data2.json", "r") as f:
+    response_json = json.load(f)
+  global COUNT_OUTER
+  global COUNT_INNER
+  curr_vals = response_json[COUNT_OUTER]
+  COUNT_INNER += 1
+  if COUNT_INNER == curr_vals["length"]:
+    COUNT_INNER = 0
+    COUNT_OUTER = (COUNT_OUTER + 1)%len(response_json)
+  l = curr_vals["length"]
+  times = [str(i) for i in range(l)]
+  curr_vals['labels'] = times
+  curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
+  curr_vals = json.dumps(curr_vals)
+  curr_vals = HttpResponse(curr_vals, content_type='application/json')
+  curr_vals['Access-Control-Allow-Origin'] = '*'
+  return curr_vals
+
+def get_json(request):
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data.json", "r") as f:
+    response_json = json.load(f)
+  response_json = json.dumps(response_json)
+  response_to_send = HttpResponse(response_json, content_type='application/json')
+  response_to_send['Access-Control-Allow-Origin'] = '*'
+  return response_to_send
 
 def get_pitch(request):
   # right now, just return datetime
