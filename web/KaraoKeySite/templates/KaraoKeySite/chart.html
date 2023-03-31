@@ -58,6 +58,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 5,
+          borderColor: 'rgb(75, 192, 192)',
         },
         {
           data: vals["target"],
@@ -65,6 +66,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 20,
+          borderColor: 'rgb(75, 192, 192)',
         },
       ]
     }
@@ -96,7 +98,8 @@
               display: true,
               text: vals["lyrics"],
               font: {
-                  size: 36
+                  size: 36,
+                  family: 'Inter'
               }
             },
             chartAreaBorder: {
@@ -114,7 +117,8 @@
               },
               ticks: {
                 display: false
-              }
+              },
+              // max: 15
             },
             x: {
               grid: {
@@ -150,6 +154,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 5,
+          borderColor: 'rgb(242, 48, 100)',
         },
         {
           data: vals["target"],
@@ -157,6 +162,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 20,
+          borderColor: 'rgb(143, 227, 255)',
         },
       ]
     }
@@ -177,7 +183,7 @@
 
   }
 
-  window.setInterval(myFunc, 50);
+  window.setInterval(myFunc, 25);
 </script>
 
 {% endblock %}
