@@ -76,7 +76,18 @@ def home(request):
   return render(request, 'KaraoKeySite/home.html', {})
 
 def dummy_chart(request):
+  global COUNT_INNER, COUNT_OUTER
+  COUNT_OUTER = 0
+  COUNT_INNER = 0
   return render(request, 'KaraoKeySite/chart.html', {})
+
+
+def restart_chart(request):
+  global COUNT_INNER, COUNT_OUTER
+  COUNT_OUTER = 0
+  COUNT_INNER = 0
+  curr_vals = HttpResponse({}, content_type='application/json')
+  return curr_vals
 
 def dummy_record(request):
   return render(request, 'KaraoKeySite/record.html', {})

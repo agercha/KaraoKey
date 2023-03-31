@@ -12,6 +12,9 @@
 
 {% block page-content %}
 <div id="main">
+  <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
+    <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
+  </audio>
   <div style="height:800px">
     <canvas id="myChart"></canvas>
   </div>
@@ -20,6 +23,9 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 <script type="text/javascript">
+
+  var chartinterval;
+
   const chartAreaBorder = {
     id: 'chartAreaBorder',
     beforeDraw(chart, args, options) {
@@ -58,7 +64,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 5,
-          borderColor: 'rgb(75, 192, 192)',
+          borderColor: 'rgb(242, 48, 100)',
         },
         {
           data: vals["target"],
@@ -66,7 +72,7 @@
           tension: 0.1,
           stepped: true,
           borderWidth: 20,
-          borderColor: 'rgb(75, 192, 192)',
+          borderColor: 'rgb(143, 227, 255)',
         },
       ]
     }
@@ -183,7 +189,21 @@
 
   }
 
-  window.setInterval(myFunc, 25);
+  function startAll() {
+    chartinterval = window.setInterval(myFunc, 20);
+  }
+
+  function pauseAll() {
+    clearInterval(chartinterval);
+  }
+
+  function endAll() {
+    clearInterval(chartinterval);
+
+    let xhr = new XMLHttpRequest()
+    xhr.open("GET", "restart-chart", true)
+    xhr.send()
+  }
 </script>
 
 {% endblock %}
