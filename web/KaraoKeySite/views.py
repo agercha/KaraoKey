@@ -11,7 +11,7 @@ import wave
 
 
 from django.views.generic import TemplateView
-from chartjs.views.lines import BaseLineChartView
+#from chartjs.views.lines import BaseLineChartView
 
 import json, time, os
 
@@ -46,29 +46,22 @@ def get_json(request):
   return response_to_send
 
 def get_pitch(request):
-  # right now, just return datetime
-  
-  # FOR KELLY!
-  #request.FILES.get['small_recorded_audio'] is the wav file!
   full_audio_file = request.FILES.get("full_recorded_audio")
   small_audio_file = request.FILES.get("small_recorded_audio")
 
-  with default_storage.open('tmp/'+small_audio_file.name, 'wb+'):
-    wf = wave.open('tmp/'+small_audio_file.name, 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(1)
-    wf.setframerate(44100)
-    wf.writeframes(full_audio_file.read())
-    wf.close()
+  wf = wave.open('tmp/'+full_audio_file.name, 'wb')
+  wf.setnchannels(1)
+  wf.setsampwidth(1)
+  wf.setframerate(44100)
+  wf.writeframes(full_audio_file.read())
+  wf.close()
 
-  t = time.localtime()
-  current_time = time.strftime("%H:%M:%S", t)
   response = []
-
-  response.append({'curr_pitch': process_wav_output_pitch('tmp/'+small_audio_file.name)})
+  response.append({'curr_pitch': process_wav_output_pitch('tmp/'+full_audio_file.name)})
   response_json = json.dumps(response)
   response_to_send = HttpResponse(response_json, content_type='application/json')
   response_to_send['Access-Control-Allow-Origin'] = '*'
+  
   return response_to_send
 
 @login_required

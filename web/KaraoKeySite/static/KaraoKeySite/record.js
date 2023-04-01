@@ -93,7 +93,7 @@ start.onclick = e => {
   start.disabled = true;
   stop.removeAttribute('disabled');
   chunks=[];
-  recorder.start(2000);
+  recorder.start(1000);
 }
 
 

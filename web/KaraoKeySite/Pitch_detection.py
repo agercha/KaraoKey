@@ -4,7 +4,7 @@ import aubio, wave, numpy
 
 def process_wav_output_pitch(input_wav):
 
-    samplerate = 44100
+    samplerate = 22050
     frames = 512
     fftSize = 1024
 
@@ -22,12 +22,13 @@ def process_wav_output_pitch(input_wav):
     while True:
         samples, read = s()
         pitch = aubioPitch(samples)[0]
-        if (pitch != 0.0):
+        if (pitch != 0.0 and pitch < 1000):
             pitches.append(pitch)
+            #print(pitch)
         total_frames += read
         if read < frames: break
     
-    # for now, just return the average of all pitches in the wav input
+    # for now, just return the last pitch
     if len(pitches) != 0:
-        return sum(pitches)/len(pitches)
+        return float(pitches[-1])
     return 0
