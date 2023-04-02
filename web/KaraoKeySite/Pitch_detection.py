@@ -1,6 +1,12 @@
-# aubio pitch detection on a wav file
+################################################################################
+# Pitch_detection.py
+#
+# Aubio pitch detection on a wav file, integrated with note detection algo
+################################################################################
 
 import aubio, wave, numpy
+from feedback import *
+from test import debug
 
 def process_wav_output_pitch(input_wav):
 
@@ -19,14 +25,19 @@ def process_wav_output_pitch(input_wav):
     # total number of frames read
     total_frames = 0
     pitches = []
+    pitch_data = []
     while True:
         samples, read = s()
         pitch = aubioPitch(samples)[0]
         if (pitch != 0.0 and pitch < 1000):
             pitches.append(pitch)
+            note, octave, deviation = frequency_to_note_data(pitch)
+            pitch_data.append((note, octave, deviation)) # 1:1 mapping
             #print(pitch)
         total_frames += read
         if read < frames: break
+
+    debug.print_pitch_note_data(pitches, pitch_data)
     
     # for now, just return the last pitch
     if len(pitches) != 0:
