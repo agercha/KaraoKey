@@ -5,8 +5,8 @@
 ################################################################################
 
 import aubio, wave, numpy
-from feedback import *
-from test import debug
+from KaraoKeySite.feedback import *
+from KaraoKeySite.test import debug
 
 def process_wav_output_pitch(input_wav):
 
