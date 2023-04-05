@@ -29,6 +29,7 @@
 
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <!-- <script type="module" src="FileSaver.js"></script> -->
   <script src="../../static/KaraoKeySite/record.js"></script>
 
   <script>
@@ -43,7 +44,7 @@
     //   xhttp.open("GET", "ajax_info.txt", true);
     //   xhttp.send();
     // }
-    setInterval(sendData(), 1000);
+    setInterval(sendData, 1000);
     //var FileWriter = require('wav').FileWriter;
 
     // window.onload = sendData;

@@ -10,8 +10,10 @@ from KaraoKeySite.test import debug
 
 def process_wav_output_pitch(input_wav):
 
-    samplerate = 22050
-    frames = 512
+    # samplerate = 22050
+    samplerate = 48000
+    # frames = 512
+    frames = 32
     fftSize = 1024
 
     s = aubio.source(input_wav, samplerate, frames)
@@ -37,7 +39,7 @@ def process_wav_output_pitch(input_wav):
         total_frames += read
         if read < frames: break
 
-    debug.print_pitch_note_data(pitches, pitch_data)
+    # debug.print_pitch_note_data(pitches, pitch_data)
     
     # for now, just return the last pitch
     if len(pitches) != 0:

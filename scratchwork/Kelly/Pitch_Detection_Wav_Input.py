@@ -2,10 +2,12 @@
 
 from aubio import source, pitch
 
-inputFile = "C_Major_Scale_Fast/C_Major_Scale_Fast_piano.wav"
+# inputFile = "C_Major_Scale_Fast/C_Major_Scale_Fast_piano.wav"
+inputFile = "../Anna/hbdmyvocals.wav"
 
 samplerate = 44100
-frames = 1024
+# frames = 1024
+frames = 200
 fftSize = 2048
 
 s = source(inputFile, samplerate, frames)
