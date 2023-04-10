@@ -1,15 +1,27 @@
 ################################################################################
 # feedback_test.py
 #
-# Run this file to test the frequency to note algorithm. The note_to_freq_data
-# was taken from here: https://mixbutton.com/mixing-articles/music-note-to-frequency-chart/
+# Run this file to test all algorithms related to feedback-- note detection algo,
+# feedback generation.
 ################################################################################
+
+import json, time, os
 import sys
 sys.path.insert(0, '..')
 from feedback import *
 
 def test_frequency_to_note_data():
+    '''
+    Test cases for note detection. Looks at all the known note-frequencies pairings
+    for each note in 9 octaves and compares that to the actual output of the 
+    note detection algorithm.
+
+    If tests fail, outputs (Hz, expected note, actual note), then crashes.
+    '''
+
     print("Testing frequency_to_note_data...", end="")
+    # The note_to_freq_data was taken from here: 
+    # https://mixbutton.com/mixing-articles/music-note-to-frequency-chart/
     note_to_freq_data = '''\
 C 16.35 32.70 65.41 130.81 261.63 523.25 1046.50 2093.00 4186.01
 C#/Db 17.32 34.65 69.30 138.59 277.18 554.37 1108.73 2217.46 4434.92
@@ -35,4 +47,36 @@ B 30.87 61.74 123.47 246.94 493.88 987.77 1975.53 3951.07 7902.13
     
     print("Passed!")
 
-# test_frequency_to_note_data()
+def test_frequency_feedback():
+    '''
+    Dummy tests for the feedback algorithm. Reads from dummy_data2's target and 
+    user frequencies. 
+    '''
+
+    input_file = "/static/KaraoKeySite/dummy_data2.json"
+
+    # get current working directory
+    path = os.getcwd()
+    with open(os.path.abspath(os.path.join(path, os.pardir)) + input_file, "r") as f:
+        test_data = json.load(f)
+    
+    total_scores = []
+    num_outer_chunks = len(test_data)
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+        # num_inner_chunks = outer_chunk["length"]
+
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        user_freqs = outer_chunk["user"]
+
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(user_freqs)):
+            target_freq = target_freqs[inner_index]
+            user_freq = user_freqs[inner_index]
+            score = get_accuracy_score(target_freq, user_freq)
+            total_scores.append(score) # hmmmm...
+
+    print(sum(total_scores) / len(total_scores))
+    return sum(total_scores) / len(total_scores)
