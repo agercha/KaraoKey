@@ -33,9 +33,14 @@ def pitch_detect_from_file(input_ogg):
     while True:
         samples, read = s()
         pitch = aubioPitch(samples)[0]
+        if pitch != 0.0 and pitch < 200.0:
+            print(f'under: prev={pitch} new=0.0')
+            pitch = 0.0
+        if pitch > 1000.0:
+            print(f'over: prev={pitch} new={all_pitches[-1]}')
+            pitch = all_pitches[-1]
         all_pitches.append(pitch)
-        # confidence = aubioPitch.get_confidence()
-        # print(pitch)
+        all_pitches.append(pitch)
         total_frames += read
         if read < frames: break
     
