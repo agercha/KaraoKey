@@ -4,9 +4,43 @@
 # Aubio pitch detection on a wav file, integrated with note detection algo
 ################################################################################
 
-import aubio, wave, numpy
+import aubio, wave, numpy, time
 from KaraoKeySite.feedback import *
 from KaraoKeySite.test import debug
+from pydub import AudioSegment
+
+
+def pitch_detect_from_file(input_ogg):
+    inputFileWav = "happybirthday.wav"
+    song = AudioSegment.from_file(input_ogg)
+    song.export(inputFileWav, format="wav")
+
+    samplerate = 44100
+    frames = 1024 # HOP SIZE
+    fftSize = 2048
+
+    s = aubio.source(inputFileWav, samplerate, frames)
+    samplerate = s.samplerate
+
+    tolerance = 0.8
+
+    aubioPitch = aubio.pitch("yinfft", fftSize, frames, samplerate)
+    aubioPitch.set_unit("Hz")
+    aubioPitch.set_tolerance(tolerance)
+    # total number of frames read
+    all_pitches = []
+    total_frames = 0
+    while True:
+        samples, read = s()
+        pitch = aubioPitch(samples)[0]
+        all_pitches.append(pitch)
+        # confidence = aubioPitch.get_confidence()
+        # print(pitch)
+        total_frames += read
+        if read < frames: break
+    
+    return all_pitches
+
 
 def process_wav_output_pitch(input_wav):
 
