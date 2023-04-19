@@ -12,9 +12,17 @@
 
 {% block page-content %}
 <div id="main">
-  <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
+  <audio preload='none' onended ="endAll()" id="songbox" style="display: none;">
     <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
   </audio>
+
+  <div id='buttons_area'>
+    <button id='start'>start</button>
+  </div>
+
+  <!-- <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
+    <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
+  </audio> -->
   <div style="height:800px">
     <canvas id="myChart"></canvas>
   </div>
@@ -23,6 +31,9 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 <script type="text/javascript">
+  start.onclick = e => {
+      startAll()
+    }
 
   var chartinterval;
 
@@ -190,6 +201,8 @@
   }
 
   function startAll() {
+    document.getElementById('buttons_area').style.display = 'none';
+    document.getElementById('songbox')['play']();
     chartinterval = window.setInterval(myFunc, 20);
   }
 
@@ -199,6 +212,8 @@
 
   function endAll() {
     clearInterval(chartinterval);
+    document.getElementById("songbox").style.display = "none"
+    document.getElementById("myChart").style.display = "none"
 
     let xhr = new XMLHttpRequest()
     xhr.open("GET", "restart-chart", true)
