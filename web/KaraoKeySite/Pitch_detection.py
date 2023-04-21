@@ -40,7 +40,6 @@ def pitch_detect_from_file(input_ogg):
             print(f'over: prev={pitch} new={all_pitches[-1]}')
             pitch = all_pitches[-1]
         all_pitches.append(pitch)
-        all_pitches.append(pitch)
         total_frames += read
         if read < frames: break
     

@@ -20,9 +20,10 @@
     <button id='start'>start</button>
   </div>
 
-  <div id="summary_link" style="display: none;">
-    <a href="/summary" id="id_nav_logout" class="header_button">
-      summary
+  <div id="after_feedback" style="display: none;">
+    <div>You scored {{ score }}</div>
+    <a href="/" id="id_nav_logout" class="header_button">
+      home
     </a> 
   </div>
   
@@ -40,6 +41,7 @@
 
 
   var user_vals = {{ user_vals }}
+  var score = {{ score }}
 
   start.onclick = e => {
       startAll()
@@ -224,7 +226,7 @@
     clearInterval(chartinterval);
     document.getElementById("songbox").style.display = "none"
     document.getElementById("myChart").style.display = "none"
-    document.getElementById("summary_link").style.display = "block"
+    document.getElementById("after_feedback").style.display = "block"
 
     let xhr = new XMLHttpRequest()
     xhr.open("GET", "restart-chart", true)

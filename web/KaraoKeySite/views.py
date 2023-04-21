@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout
 from KaraoKeySite.Pitch_detection import process_wav_output_pitch, pitch_detect_from_file
+from KaraoKeySite.feedback import feedback_from_res
 from KaraoKeySite.forms import *
 from django.core.files.storage import default_storage
 import wave
@@ -76,7 +77,8 @@ def upload(request):
       ogg_f = request.FILES["file"]
       if ogg_f.content_type == 'video/ogg':
         res = pitch_detect_from_file(ogg_f)
-        return chart(request, res)
+        score = feedback_from_res(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", res)
+        return chart(request, res, score)
   else:
       form = RecordingForm()
   return render(request, 'KaraoKeySite/upload.html', {"form": form})
@@ -107,11 +109,11 @@ def home(request):
 def summary(request):
   return render(request, 'KaraoKeySite/summary.html', {})
 
-def chart(request, user_vals=[]):
+def chart(request, user_vals=[], score=0):
   global COUNT_INNER, COUNT_OUTER
   COUNT_OUTER = 0
   COUNT_INNER = 0
-  return render(request, 'KaraoKeySite/chart.html', {'user_vals':user_vals})
+  return render(request, 'KaraoKeySite/chart.html', {'user_vals':user_vals, 'score':score})
 
 def dummy_chart(request):
   global COUNT_INNER, COUNT_OUTER
