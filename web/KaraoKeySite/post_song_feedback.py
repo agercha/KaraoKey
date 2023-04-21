@@ -7,6 +7,8 @@
 # 
 # Test functions can be found in feedback_tests.py
 ################################################################################
+import json
+from feedback import *
 
 # TODO: This global should be pulled in from feedback.py, instead of redeclared
 # here. For now, assert at this value should be the same. 
@@ -58,3 +60,49 @@ def get_score_ratios(scores):
     total = hits + near_misses + misses
 
     return (hits/total, near_misses/total, misses/total)
+
+def json_post_frequency_feedback(input_json_filepath:str):
+    '''
+    Given an input json file containing 1:1 mappings of user and target\
+    frequencies, calculates an accuracy score. 
+
+    Parameters:
+        input_json_filepath: a 1:1 mapping of user to target freqeuencies.
+        Expects a format of:
+            [{
+                "length": int
+                "target": [array, of, floats]
+                "user": [array, of, floats]
+                "lyrics" : "string"
+            }]
+        
+    Return value:
+        A comprehensive score ranging from [0, 1] reflecting how accurately the 
+        user was singing to the target frequency.
+    '''
+
+    # this will probably need to be modified once we actually have the actual
+    # file directory.
+    with open(input_json_filepath) as f:
+        test_data = json.load(f)
+    
+    total_scores = []
+    num_outer_chunks = len(test_data)
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+        # num_inner_chunks = outer_chunk["length"]
+
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        user_freqs = outer_chunk["user"]
+
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(user_freqs)):
+            target_freq = target_freqs[inner_index]
+            user_freq = user_freqs[inner_index]
+            score = get_accuracy_score(target_freq, user_freq)
+            if (score != 0): total_scores.append(score) # hmmmm...
+
+    print(sum(total_scores) / len(total_scores))
+    return sum(total_scores) / len(total_scores)
