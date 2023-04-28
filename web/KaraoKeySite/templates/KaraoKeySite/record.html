@@ -14,28 +14,38 @@
 
 {% block page-content %}
   <div id='selection_area'>
-    <button id='request_button'>Request Stream 1</button>
+    <button id='request_button' class="nice_button">
+      <div class="nice_button_text">Request Stream</div>
+    </button>
   </div>
   <audio preload='none' onended ="endAll()" id="songbox" style="display: none;">
     <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
   </audio>
 
   <div id='buttons_area'>
-    <button id='start' disabled="disabled">start</button>
+    <button id='start' class="nice_button" style="display: none">
+      <div class="nice_button_text">
+        start
+      </div>
+    </button>
   </div>
 
   <div id="download" style="display: none;">
     <div>
-      <a id="elem"> </a>
+      <button class="nice_button">
+        <a id="elem" class="nice_button_text"> </a>
+      </button>
     </div>
     <div>
-      <a href="/upload" id="id_nav_logout" class="header_button">
-        next step
-      </a> 
+      <button class="nice_button">
+        <a href="/upload" id="id_nav_logout" class="header_button, nice_button_text">
+          next step
+        </a> 
+      </button>
     </div>
   </div>
 
-  <div style="height:800px">
+  <div style="height:650px">
     <canvas id="myChart" style="display: none";></canvas>
   </div>
 
@@ -80,7 +90,8 @@
         stream = _stream;
         id('selection_area').style.display = 'none';
         // id('buttons_area').style.display = 'inherit';
-        start.removeAttribute('disabled');
+        // start.removeAttribute('disabled');
+        start.style.display = "block"
         recorder = new MediaRecorder(stream);
 
         recorder.ondataavailable = e => {

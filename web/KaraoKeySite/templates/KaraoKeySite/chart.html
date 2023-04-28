@@ -17,21 +17,27 @@
   </audio>
 
   <div id='buttons_area'>
-    <button id='start'>start</button>
+    <button id='start' class="nice_button">
+      <div class="nice_button_text">
+        start
+      </div>
+    </button>
   </div>
 
   <div id="after_feedback" style="display: none;">
     <div>You scored {{ score }}</div>
-    <a href="/" id="id_nav_logout" class="header_button">
-      home
-    </a> 
+    <button class="nice_button">
+      <a href="/" id="id_nav_logout" class="header_button, nice_button_text">
+        home
+      </a> 
+    </button>
   </div>
   
 
   <!-- <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
     <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
   </audio> -->
-  <div id = "chartDiv" style="height:800px; display: none;">
+  <div id = "chartDiv" style="height:650px; display: none;">
     <canvas id="myChart"></canvas>
   </div>
 </div>
