@@ -6,14 +6,6 @@
 {% endblock %}
 
 {% block page-content %}
-<div id="id_header_div">
-  <div id="id_site_name">
-    KaraoKey          
-  </div>
-  <a href="{% url 'welcome' %}" id="id_nav_logout" class="header_button">
-    logout
-  </a> 
-</div>
 <div id="main">
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}

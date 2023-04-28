@@ -31,7 +31,7 @@
   <!-- <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
     <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
   </audio> -->
-  <div style="height:800px">
+  <div id = "chartDiv" style="height:800px; display: none;">
     <canvas id="myChart"></canvas>
   </div>
 </div>
@@ -213,6 +213,7 @@
   }
 
   function startAll() {
+    document.getElementById('chartDiv').style.display = 'block';
     document.getElementById('buttons_area').style.display = 'none';
     document.getElementById('songbox')['play']();
     chartinterval = window.setInterval(myFunc, 20);

@@ -3,6 +3,7 @@ body {
   background: #F2D8FF;
   margin-top: 50px;
   font-family: 'Inter';
+  text-align: center;
 }
 @font-face {
   font-family: SunsetClub;
