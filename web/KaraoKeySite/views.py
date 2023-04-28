@@ -129,7 +129,7 @@ def restart_chart(request):
   curr_vals = HttpResponse({}, content_type='application/json')
   return curr_vals
 
-def dummy_record(request):
+def record(request):
   return render(request, 'KaraoKeySite/record.html', {})
 
 def quick_enter(request):
