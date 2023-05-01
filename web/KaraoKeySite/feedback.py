@@ -169,11 +169,16 @@ def feedback_from_res(input_json_filepath:str, user_freqs):
         # loop over all the inner frequencies contained in each outer chunk
         for inner_index in range(len(target_freqs)):
             target_freq = target_freqs[inner_index]
-            user_freq = user_freqs[user_ind]
+            if user_ind < len(user_freqs): 
+                user_freq = user_freqs[user_ind]
+            else:
+                user_freq = 0
             score = get_accuracy_score(target_freq, user_freq)
             if (score != 0): total_scores.append(score) # hmmmm...
             user_ind += 1
-
+    
+    # print(outer_index, inner_index, user_ind)
+    # assert(False)
     print(sum(total_scores) / len(total_scores))
     return sum(total_scores) / len(total_scores)
 
