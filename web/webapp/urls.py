@@ -35,4 +35,5 @@ urlpatterns = [
     path('get-target-json', views.get_target_json, name="get_target_json"),
     path('upload', views.upload, name="upload"),
     path('summary', views.summary, name="summary"),
+    path('mode', views.mode, name="mode"),
 ]

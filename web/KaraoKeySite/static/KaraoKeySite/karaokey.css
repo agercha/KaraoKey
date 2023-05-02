@@ -72,6 +72,63 @@ input[type=submit] {
   border-radius: 15px;
 } 
 
+.mode_button_wide_blue {
+  position: relative;
+  width: 50vw;
+  height: 20vh;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+} 
+
+.mode_button_text_blue {
+  margin: auto;
+  
+  font-family: SunsetClub;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 11vw;
+  text-align: center;
+  text-decoration: none;
+  
+  color: #e1fffd;
+  text-shadow: 0 0 10px #00cec1;
+}
+
+.mode_button_wide_pink {
+  position: relative;
+  width: 50vw;
+  height: 20vh;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #FFB0F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+} 
+
+.mode_button_text_pink {
+  margin: auto;
+  
+  font-family: SunsetClub;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 11vw;
+  text-align: center;
+  text-decoration: none;
+  
+  color: #FFEAFC;
+  text-shadow: 0 0 10px #FD76E7;
+}
+
+
 .nice_button_text {
   margin: auto;
   

@@ -106,6 +106,10 @@ def get_pitch(request):
 def home(request):
   return render(request, 'KaraoKeySite/home.html', {})
 
+@login_required
+def mode(request):
+  return render(request, 'KaraoKeySite/mode.html', {})
+
 def summary(request):
   return render(request, 'KaraoKeySite/summary.html', {})
 
