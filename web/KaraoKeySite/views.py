@@ -39,7 +39,7 @@ def get_target_json(request):
   return curr_vals
 
 def get_chart_json(request):
-  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data2.json", "r") as f:
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", "r") as f:
     response_json = json.load(f)
   global COUNT_OUTER
   global COUNT_INNER
@@ -55,7 +55,7 @@ def get_chart_json(request):
   l = curr_vals["length"]
   times = [str(i) for i in range(l)]
   curr_vals['labels'] = times
-  curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
+  # curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
   curr_vals['start_index'] = start_index
   curr_vals['end_index'] = end_index
   curr_vals = json.dumps(curr_vals)
