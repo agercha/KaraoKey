@@ -187,6 +187,40 @@ def get_qualitative_feedback(input_freq, target_freq, accuracy_score):
         accuracy_feedback = "You are sharp."
 
     return accuracy_feedback
+def feedback_from_res(input_json_filepath:str, user_freqs):
+
+    # this will probably need to be modified once we actually have the actual
+    # file directory.
+    with open(input_json_filepath) as f:
+        test_data = json.load(f)
+    
+    total_scores = []
+    num_outer_chunks = len(test_data)
+    user_ind = 0
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+        # num_inner_chunks = outer_chunk["length"]
+
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        # user_freqs = outer_chunk["user"]
+
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(target_freqs)):
+            target_freq = target_freqs[inner_index]
+            if user_ind < len(user_freqs): 
+                user_freq = user_freqs[user_ind]
+            else:
+                user_freq = 0
+            score = get_accuracy_score(target_freq, user_freq)
+            if (score != 0): total_scores.append(score) # hmmmm...
+            user_ind += 1
+    
+    # print(outer_index, inner_index, user_ind)
+    # assert(False)
+    print(sum(total_scores) / len(total_scores))
+    return sum(total_scores) / len(total_scores)
 
 def get_progression(scores):
     '''
