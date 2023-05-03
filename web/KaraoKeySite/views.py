@@ -22,9 +22,7 @@ COUNT_INNER = 0
 TARGET_SONGS = ["hbd", "dont_stop_believin"]
 
 def get_target_json(request):
-  global TARGET_SONGS
-  song_name = TARGET_SONGS[int(request.POST["song_num"])]
-  with open(os.path.abspath(os.getcwd()) + f"/KaraoKeySite/static/KaraoKeySite/{song_name}.json", "r") as f:
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", "r") as f:
     response_json = json.load(f)
   global COUNT_OUTER
   global COUNT_INNER
