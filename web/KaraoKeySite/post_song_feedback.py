@@ -7,7 +7,7 @@
 # 
 # Test functions can be found in feedback_tests.py
 ################################################################################
-import json
+import json, math
 from feedback import *
 
 # TODO: This global should be pulled in from feedback.py, instead of redeclared
@@ -60,6 +60,76 @@ def get_score_ratios(scores):
     total = hits + near_misses + misses
 
     return (hits/total, near_misses/total, misses/total)
+
+def get_worst_chunk_feedback(curr_discrepancy:list):
+    total = len(curr_discrepancy)
+    sharp = curr_discrepancy.count(1) / total
+    on_pitch = curr_discrepancy.count(0) / total
+    flat = curr_discrepancy.count(-1) / total
+
+    if abs(sharp - flat) < 0.1:
+        return "You were shaky during this section. Neither sharp or flat, but off-tune."
+    elif sharp > flat:
+        return "In this section, you leaned sharp (above the target pitch)."
+    else:
+        return "In this section, you leaned flat (below the target pitch)."
+    
+def get_best_chunk_feedback(curr_discrepancy:list):
+    total = len(curr_discrepancy)
+    sharp = curr_discrepancy.count(1) / total
+    on_pitch = curr_discrepancy.count(0) / total
+    flat = curr_discrepancy.count(-1) / total
+
+    return f"In your best sung section, you sang on pitch {round(on_pitch,2)}% of the time."
+
+def get_discrepancy_data(input_json_filepath:str):
+    # this will probably need to be modified once we actually have the actual
+    # file directory.
+    with open(input_json_filepath) as f:
+        test_data = json.load(f)
+
+    worst_outer_chunk = -1
+    largest_discrepancy = -1
+    worst_qualitative_feedback = ""
+
+    best_outer_chunk = -1
+    smallest_discrepancy = math.inf
+    best_qualitative_feedback = ""
+    
+    total_scores = []
+    num_outer_chunks = len(test_data)
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        user_freqs = outer_chunk["user"]
+
+        # Accumulate inner chunk discrepancy
+        curr_discrepancy = []
+
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(user_freqs)):
+            target_freq = target_freqs[inner_index]
+            user_freq = user_freqs[inner_index]
+            score = get_accuracy_score(target_freq, user_freq)
+            relative = get_sharp_or_flat(user_freq, target_freq, score)
+            curr_discrepancy.append(relative)
+
+        abs_discrepancy = sum(abs(num) for num in curr_discrepancy)
+        if abs_discrepancy > largest_discrepancy:
+            largest_discrepancy = abs_discrepancy
+            worst_outer_chunk = outer_index
+            worst_qualitative_feedback = get_worst_chunk_feedback(curr_discrepancy)
+
+        elif abs_discrepancy < smallest_discrepancy:
+            smallest_discrepancy = abs_discrepancy
+            best_outer_chunk = outer_index
+            best_qualitative_feedback = get_best_chunk_feedback(curr_discrepancy)
+
+    return worst_outer_chunk, worst_qualitative_feedback, best_outer_chunk, best_qualitative_feedback
+
 
 def json_post_frequency_feedback(input_json_filepath:str):
     '''

@@ -122,6 +122,41 @@ def get_accuracy_score(input_freq:float, target_freq:float):
     # print(f"note accuracy: {note_accuracy}, cents accuracy: {cents_accuracy}, score={accuracy_score:.2f}%")
     return accuracy_score
 
+def get_sharp_or_flat(input_freq, target_freq, accuracy_score):
+    '''
+    Given an input frequency, target frequency to hit, and accuracy score, 
+    returns qualitative feedback.
+
+    This function is used for instantaneous feedback generation. 
+
+    ### Parameters:
+        input_freq: the frequency in Hz that the user sang at. Input freq comes\
+                    from the pitch detection algorithm.
+        target_freq: the target frequency in Hz that the user is aiming to sing\
+                     at. Target frequency also comes from the PDA.
+        accuracy_score: accuracy score 
+
+    ### Return value:
+        Qualitative instantaneous feedback.
+    '''
+    # Either input or target freq was 0
+    if accuracy_score == 0: return 0
+
+    _, _, input_cents_deviation = frequency_to_note_data(input_freq)
+    _, _, target_cents_deviation = frequency_to_note_data(target_freq)
+
+    relative = 0
+    if (accuracy_score >= NOTE_WEIGHTING and 
+        (abs(input_cents_deviation - target_cents_deviation) <= 7)):
+        relative = 0
+    else:
+        if input_freq > target_freq:
+            relative = 1
+        else:
+            relative = -1
+
+    return relative
+
 def get_qualitative_feedback(input_freq, target_freq, accuracy_score):
     '''
     Given an input frequency, target frequency to hit, and accuracy score, 
@@ -142,18 +177,14 @@ def get_qualitative_feedback(input_freq, target_freq, accuracy_score):
     # Either input or target freq was 0
     if accuracy_score == 0: return ""
 
-    _, _, input_cents_deviation = frequency_to_note_data(input_freq)
-    _, _, target_cents_deviation = frequency_to_note_data(target_freq)
+    relative = get_sharp_or_flat(input_freq, target_freq, accuracy_score)
 
-    accuracy_feedback = ""
-    if (accuracy_score >= NOTE_WEIGHTING and 
-        (abs(input_cents_deviation - target_cents_deviation) <= 7)):
+    if relative == 0:
         accuracy_feedback = "Perfect! On pitch."
+    elif relative == -1:
+        accuracy_feedback = "You are flat."
     else:
-        if input_freq > target_freq:
-            accuracy_feedback = "You are sharp."
-        else:
-            accuracy_feedback = "You are flat."
+        accuracy_feedback = "You are sharp."
 
     return accuracy_feedback
 
