@@ -19,8 +19,12 @@ import json, time, os
 COUNT_OUTER = 0
 COUNT_INNER = 0
 
+TARGET_SONGS = ["hbd", "dont_stop_believin"]
+
 def get_target_json(request):
-  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", "r") as f:
+  global TARGET_SONGS
+  song_name = TARGET_SONGS[int(request.POST["song_num"])]
+  with open(os.path.abspath(os.getcwd()) + f"/KaraoKeySite/static/KaraoKeySite/{song_name}.json", "r") as f:
     response_json = json.load(f)
   global COUNT_OUTER
   global COUNT_INNER
@@ -129,8 +133,23 @@ def restart_chart(request):
   curr_vals = HttpResponse({}, content_type='application/json')
   return curr_vals
 
-def record(request):
-  return render(request, 'KaraoKeySite/record.html', {})
+def record(request, song="hbd"):
+  global COUNT_INNER, COUNT_OUTER
+  COUNT_OUTER = 0
+  COUNT_INNER = 0
+  if song == "hbd":
+    context = {"backing": "../../static/KaraoKeySite/songs/hbdnovocals.mp3", "song_num" : 0}
+  else:
+    context = {"backing": "../../static/KaraoKeySite/songs/don't_stop_believin_backing_track.wav", "song_num" : 1}
+  context["song_name"] = song
+  print(context)
+  return render(request, 'KaraoKeySite/record.html', context)
+
+def record_hbd(request):
+  return record(request, "hbd")
+
+def record_dontstop(request):
+  return record(request, "dontstop")
 
 def quick_enter(request):
   if not User.objects.filter(username="admin").exists():
