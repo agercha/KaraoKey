@@ -1,8 +1,10 @@
-/* Desktop - 15 */
 body {
   background: #F2D8FF;
-  margin-top: 50px;
+  /* margin-top: 50px; */
+  margin: 100px;
   font-family: 'Inter';
+  text-align: center;
+  font-size: 25px;
 }
 @font-face {
   font-family: SunsetClub;
@@ -26,6 +28,118 @@ body {
 }
 
 /* Sign Up Box */
+input[type=submit] {
+  position: relative;
+  /* width: 200px; */
+  /* height: 50px; */
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
+
+.nice_button {
+  position: relative;
+  /* width: 200px; */
+  height: 50px;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
+
+.nice_button_narrow {
+  position: relative;
+  width: 200px;
+  height: 50px;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+} 
+
+.mode_button_wide_blue {
+  position: relative;
+  width: 50vw;
+  height: 20vh;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #D5F5F3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+} 
+
+.mode_button_text_blue {
+  margin: auto;
+
+  font-family: SunsetClub;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 11vw;
+  text-align: center;
+  text-decoration: none;
+
+  color: #e1fffd;
+  text-shadow: 0 0 10px #00cec1;
+}
+
+.mode_button_wide_pink {
+  position: relative;
+  width: 50vw;
+  height: 20vh;
+  margin: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: #FFB0F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+} 
+
+.mode_button_text_pink {
+  margin: auto;
+
+  font-family: SunsetClub;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 11vw;
+  text-align: center;
+  text-decoration: none;
+
+  color: #FFEAFC;
+  text-shadow: 0 0 10px #FD76E7;
+}
+
+.nice_button_text {
+  margin: auto;
+  
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  
+  color: #000000;
+}
 
 #id_register_button {
   position: relative;
@@ -45,6 +159,17 @@ body {
   /*none for now */
 }
 
+#reg_login_logo{
+  font-family: SunsetClub; /* download this font */
+  font-style: normal;
+  font-weight: 20;
+  font-size: 80px;
+  line-height: 10px;
+  text-align: center;
+
+  color: #FFEAFC;
+  text-shadow: 0 0 10px #FD76E7;
+}
 
 /* Login Box */
 
@@ -55,6 +180,7 @@ body {
   margin: 25px;
   margin-left: auto;
   margin-right: auto;
+  display:inline-block;
 
   background: #FFB0F2;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -85,3 +211,36 @@ body {
   color: #000000;
 }
 
+input[type=text]{
+  background: #FFEAFC;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  width: 300px;
+  font-size: 40px;
+  height: 40px;
+  margin: 5px;
+}
+
+input[type=password]{
+  background: #FFEAFC;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  width: 300px;
+  font-size: 40px;
+  height: 40px;
+  margin: 5px;
+}
+
+input[type=email]{
+  background: #FFEAFC;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  width: 300px;
+  font-size: 40px;
+  height: 40px;
+  margin: 5px;
+}
+
+form{
+  display:inline-block;
+}

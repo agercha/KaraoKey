@@ -1,0 +1,25 @@
+
+{% extends "KaraoKeySite/base.html" %}
+
+{% block title %} KaraoKey {% endblock %}
+
+{% block page-name %}
+{% endblock %}
+
+{% block page-content %}
+<div id="id_header_div">
+  <div id="id_site_logo">
+    KaraoKey          
+  </div>
+  <div class="mode_button_wide_pink">
+    <a href="{% url 'record_hbd' %}" id="id_nav_logout" class="header_button, mode_button_text_pink">
+      Happy Birthday
+    </a> 
+  </div>
+  <div class="mode_button_wide_blue">
+    <a href="{% url 'mode' %}" id="id_nav_logout" class="header_button, mode_button_text_blue">
+      Dont Stop Belevin
+    </a> 
+  </div>
+</div>
+{% endblock %}
