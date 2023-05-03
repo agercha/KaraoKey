@@ -2,7 +2,7 @@
 
 from aubio import source, pitch
 
-inputFile = "C_Major_Scale_Fast/C_Major_Scale_Fast_piano.wav"
+inputFile = "don't_stop_believin_vocals.wav"
 
 samplerate = 44100
 frames = 1024
@@ -19,10 +19,13 @@ aubioPitch.set_tolerance(tolerance)
 
 # total number of frames read
 total_frames = 0
-while True:
-    samples, read = s()
-    pitch = aubioPitch(samples)[0]
-    confidence = aubioPitch.get_confidence()
-    print(f"{total_frames/float(samplerate)} {pitch} {confidence}")
-    total_frames += read
-    if read < frames: break
+
+with open("dont_stop_pitches.txt", "w") as f:
+    while True:
+        samples, read = s()
+        pitch = aubioPitch(samples)[0]
+        confidence = aubioPitch.get_confidence()
+        print(f"{total_frames/float(samplerate)} {pitch} {confidence}")
+        f.write(f"{pitch:.2f}, ")
+        total_frames += read
+        if read < frames: break
