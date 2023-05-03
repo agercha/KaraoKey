@@ -7,18 +7,25 @@
 
 {% block page-content %}
 <div id="id_header_div">
-    <div id="id_site_logo">
+    <div id="id_site_name">
         KaraoKey           
-    </div>    
+    </div>
+    <a href="login" id="id_login_link" class="reg_login">
+        login
+    </a> 
+    <br>
+    <a href="quick_enter" id="id_quick_enter">
+        quick enter
+    </a>         
 </div>
 <div id="main">
-    <h1 id="reg_login_logo">register</h1>
+    <h1 id="id_page_name">REGISTER</h1>
     <form method="post" action="{% url 'register' %}">
         <table>
             {% for field in form.visible_fields %}
                 <tr>
                     <td>{{field.label_tag}}</td>
-                    <td class="registration_input_box">{{field}}</td>
+                    <td>{{field}}</td>
                     <td class="errorlist">
                         {% for error in field.errors %} {{error}} {% endfor %}
                     </td>
@@ -32,8 +39,7 @@
         </table>
         {% csrf_token %}
         <br>
-        <button type="submit" id="id_register_button" class="reg_login_text">Register</button>
-        <button onclick="window.location.href='login'" id="id_register_button" class="reg_login_text">Login</a> 
+        <button type="submit" id="id_register_button">Register</button>
     </form>
 </div>
 {% endblock %}

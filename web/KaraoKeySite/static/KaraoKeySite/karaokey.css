@@ -1,11 +1,8 @@
 /* Desktop - 15 */
 body {
   background: #F2D8FF;
-  /* margin-top: 50px; */
-  margin: 100px;
+  margin-top: 50px;
   font-family: 'Inter';
-  text-align: center;
-  font-size: 25px;
 }
 @font-face {
   font-family: SunsetClub;
@@ -29,62 +26,6 @@ body {
 }
 
 /* Sign Up Box */
-input[type=submit] {
-  position: relative;
-  /* width: 200px; */
-  /* height: 50px; */
-  margin: 25px;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-
-  background: #D5F5F3;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-}
-
-.nice_button {
-  position: relative;
-  /* width: 200px; */
-  height: 50px;
-  margin: 25px;
-  margin-left: auto;
-  margin-right: auto;
-
-  background: #D5F5F3;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-}
-
-.nice_button_narrow {
-  position: relative;
-  width: 200px;
-  height: 50px;
-  margin: 25px;
-  margin-left: auto;
-  margin-right: auto;
-
-  background: #D5F5F3;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-} 
-
-.nice_button_text {
-  margin: auto;
-  
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 50px;
-  text-align: center;
-  text-decoration: none;
-  
-  color: #000000;
-}
 
 #id_register_button {
   position: relative;
@@ -104,17 +45,6 @@ input[type=submit] {
   /*none for now */
 }
 
-#reg_login_logo{
-  font-family: SunsetClub; /* download this font */
-  font-style: normal;
-  font-weight: 20;
-  font-size: 80px;
-  line-height: 10px;
-  text-align: center;
-
-  color: #FFEAFC;
-  text-shadow: 0 0 10px #FD76E7;
-}
 
 /* Login Box */
 
@@ -125,7 +55,6 @@ input[type=submit] {
   margin: 25px;
   margin-left: auto;
   margin-right: auto;
-  display:inline-block;
 
   background: #FFB0F2;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -156,16 +85,3 @@ input[type=submit] {
   color: #000000;
 }
 
-input{
-  background: #FFEAFC;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-  width: 300px;
-  font-size: 40px;
-  height: 40px;
-  margin: 5px;
-}
-
-form{
-  display:inline-block;
-}

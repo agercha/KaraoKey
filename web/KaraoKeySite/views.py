@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout
-from KaraoKeySite.Pitch_detection import process_wav_output_pitch, pitch_detect_from_file
-from KaraoKeySite.feedback import feedback_from_res
+from KaraoKeySite.Pitch_detection import process_wav_output_pitch
 from KaraoKeySite.forms import *
 from django.core.files.storage import default_storage
 import wave
@@ -18,6 +17,7 @@ import json, time, os
 
 COUNT_OUTER = 0
 COUNT_INNER = 0
+
 
 TARGET_SONGS = ["hbd", "dont_stop_believin"]
 
@@ -43,7 +43,7 @@ def get_target_json(request):
   return curr_vals
 
 def get_chart_json(request):
-  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", "r") as f:
+  with open(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/dummy_data2.json", "r") as f:
     response_json = json.load(f)
   global COUNT_OUTER
   global COUNT_INNER
@@ -52,16 +52,10 @@ def get_chart_json(request):
   if COUNT_INNER == curr_vals["length"]:
     COUNT_INNER = 0
     COUNT_OUTER = (COUNT_OUTER + 1)%len(response_json)
-  start_index = 0
-  for vals in response_json[:COUNT_OUTER]:
-    start_index += vals["length"]
-  end_index =  start_index + COUNT_INNER
   l = curr_vals["length"]
   times = [str(i) for i in range(l)]
   curr_vals['labels'] = times
-  # curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
-  curr_vals['start_index'] = start_index
-  curr_vals['end_index'] = end_index
+  curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
   curr_vals = json.dumps(curr_vals)
   curr_vals = HttpResponse(curr_vals, content_type='application/json')
   curr_vals['Access-Control-Allow-Origin'] = '*'
@@ -75,21 +69,9 @@ def get_json(request):
   response_to_send['Access-Control-Allow-Origin'] = '*'
   return response_to_send
 
-def upload(request):
-  if request.method == "POST":
-      form = RecordingForm()
-      ogg_f = request.FILES["file"]
-      if ogg_f.content_type == 'video/ogg':
-        res = pitch_detect_from_file(ogg_f)
-        score = feedback_from_res(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", res)
-        return chart(request, res, score)
-  else:
-      form = RecordingForm()
-  return render(request, 'KaraoKeySite/upload.html', {"form": form})
-
 def get_pitch(request):
   full_audio_file = request.FILES.get("full_recorded_audio")
-  # small_audio_file = request.FILES.get("small_recorded_audio")
+  small_audio_file = request.FILES.get("small_recorded_audio")
 
   wf = wave.open('tmp/'+full_audio_file.name, 'wb')
   wf.setnchannels(1)
@@ -110,15 +92,6 @@ def get_pitch(request):
 def home(request):
   return render(request, 'KaraoKeySite/home.html', {})
 
-def summary(request):
-  return render(request, 'KaraoKeySite/summary.html', {})
-
-def chart(request, user_vals=[], score=0):
-  global COUNT_INNER, COUNT_OUTER
-  COUNT_OUTER = 0
-  COUNT_INNER = 0
-  return render(request, 'KaraoKeySite/chart.html', {'user_vals':user_vals, 'score':score})
-
 def dummy_chart(request):
   global COUNT_INNER, COUNT_OUTER
   COUNT_OUTER = 0
@@ -132,6 +105,7 @@ def restart_chart(request):
   COUNT_INNER = 0
   curr_vals = HttpResponse({}, content_type='application/json')
   return curr_vals
+
 
 def record(request, song="hbd"):
   global COUNT_INNER, COUNT_OUTER
@@ -150,6 +124,10 @@ def record_hbd(request):
 
 def record_dontstop(request):
   return record(request, "dontstop")
+
+def dummy_record(request):
+  return render(request, 'KaraoKeySite/record.html', {})
+
 
 def quick_enter(request):
   if not User.objects.filter(username="admin").exists():

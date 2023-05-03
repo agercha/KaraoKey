@@ -7,14 +7,12 @@
 
 {% block page-content %}
 <div id="id_header_div">
-  <div id="id_site_logo">
+  <div id="id_site_name">
     KaraoKey          
   </div>
-  <div class="nice_button_narrow">
-    <a href="{% url 'welcome' %}" id="id_nav_logout" class="header_button, nice_button_text">
-      logout
-    </a> 
-  </div>
+  <a href="{% url 'welcome' %}" id="id_nav_logout" class="header_button">
+    logout
+  </a> 
 </div>
 <div id="main">
   <div class="nice_button_narrow">
@@ -22,9 +20,7 @@
       play here :)
     </a> 
   </div>
-  <!-- <p>
-    song selection screen
-  </p>
+
   <p>
     <a href="/chart" id="id_nav_logout" class="header_button">
       demo
@@ -39,6 +35,11 @@
     <a href="/song/twinkletwinkle" id="id_nav_logout" class="header_button">
       twinkle twinkle little star
     </a> 
-  </p> -->
+  </p>
+  <p>
+    <a href="{% url 'record' %}" id="id_nav_logout" class="header_button">
+      record
+    </a> 
+  </p>
 </div>
 {% endblock %}

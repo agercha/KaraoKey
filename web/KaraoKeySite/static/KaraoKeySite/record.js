@@ -19,9 +19,10 @@ function getCSRFToken() {
 
 let log = console.log.bind(console),
   id = val => document.getElementById(val),
-  // ul = id('ul'),
+  ul = id('ul'),
   request_button = id('request_button'),
-  // playbox = id('playbox'),
+  start = id('start'),
+  stop = id('stop'),
   stream,
   recorder,
   counter=1,
@@ -29,18 +30,18 @@ let log = console.log.bind(console),
   media;
 
 request_button.onclick = e => {
-  // playbox.style.display = "block"
+// body.onload = e => {
   media = {
       tag: 'audio',
-      type: 'audio/ogg',
-      ext: '.ogg',
+      type: 'audio/wav',
+      ext: '.wav',
       selector: {audio: true}
     };
 
   navigator.mediaDevices.getUserMedia(media.selector).then(_stream => {
     stream = _stream;
     id('selection_area').style.display = 'none';
-    // id('buttons_area').style.display = 'inherit';
+    id('buttons_area').style.display = 'inherit';
     start.removeAttribute('disabled');
     recorder = new MediaRecorder(stream);
 
@@ -49,16 +50,16 @@ request_button.onclick = e => {
 
       // save chunk
       // change to Blob.slice
-      const full_blob = new Blob(chunks , {type: "audio/ogg"});
-      // const small_blob = full_blob.slice(start=-10)
+      const full_blob = new Blob(chunks , {type: "audio/wav"});
+      const small_blob = full_blob.slice(start=-10)
       // change filename
-      const full_file = new File( [ full_blob ], "full_file.ogg", { type: "audio/ogg"} );
-      // const small_file = new File( [ small_blob ], "small_file.ogg", { type: "audio/ogg"} );
+      const full_file = new File( [ full_blob ], "full_file.wav", { type: "audio/wav"} );
+      const small_file = new File( [ small_blob ], "small_file.wav", { type: "audio/wav"} );
 
       let data = new FormData();
       data.append("csrfmiddlewaretoken", getCSRFToken())
       data.append("full_recorded_audio", full_file)
-      // data.append("small_recorded_audio", small_file)
+      data.append("small_recorded_audio", small_file)
 
       // send request to python
       let xhr = new XMLHttpRequest()
@@ -74,8 +75,6 @@ request_button.onclick = e => {
 
   }).catch(log);
 
-  // startAll();
-
 }
 
 function updatePage(xhr) {
@@ -87,46 +86,33 @@ function updatePage(xhr) {
 }
 
 function processResponse(response) {
-  // document.getElementById("result").innerHTML = response[0]['curr_pitch']
+  document.getElementById("result").innerHTML = response[0]['curr_pitch']
 }
 
 start.onclick = e => {
-  startAll()
-}
-
-function startAll () {
   start.disabled = true;
-  document.getElementById('songbox')['play']();
-  if (recorder.state == "inactive") {
-    chunks=[];
-    recorder.start(1000);
-  } else {
-    recorder.resume();
-  }
+  stop.removeAttribute('disabled');
+  chunks=[];
+  recorder.start(1000);
 }
 
 
-// stop.onclick = e => {
-function endAll() {
-  // stop.disabled = true;
-  document.getElementById("songbox").style.display = "none"
-  document.getElementById("buttons_area").style.display = "none"
+stop.onclick = e => {
+  stop.disabled = true;
   recorder.stop();
-  // start.removeAttribute('disabled');
-}
-
-function pauseAll() { 
-  recorder.pause();
+  start.removeAttribute('disabled');
 }
 
 function makeLink(){
   let blob = new Blob(chunks, {type: media.type })
     , url = URL.createObjectURL(blob)
+    , li = document.createElement('li')
+    , mt = document.createElement(media.tag)
   ;
-  let res = document.getElementById("download");
-  res.style.display = "block";
-  let elem = document.getElementById("elem");
-  elem.href = url;
-  elem.download = `${counter++}${media.ext}`;
-  elem.innerHTML = "download me!"
+  mt.controls = true;
+  mt.src = url;
+  li.appendChild(mt);
+  ul.innerHTML = "";
+  ul.appendChild(li);
+  document.getElementById("result").innerHTML = "";
 }
