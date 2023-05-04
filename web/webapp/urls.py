@@ -33,6 +33,7 @@ urlpatterns = [
     path('get-pitch', views.get_pitch, name="get_pitch"),
     path('get-json', views.get_json, name="get_json"),
     path('get-chart-json', views.get_chart_json, name="get_chart_json"),
+    # path('get-chart-from-vals-json', views.get_chart_from_vals_json, name="get_chart_from_vals_json"),
     path('get-target-json', views.get_target_json, name="get_target_json"),
     path('upload', views.upload, name="upload"),
     path('summary', views.summary, name="summary"),

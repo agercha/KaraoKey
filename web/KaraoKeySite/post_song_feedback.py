@@ -8,7 +8,7 @@
 # Test functions can be found in feedback_tests.py
 ################################################################################
 import json, math
-from feedback import *
+from KaraoKeySite.feedback import *
 
 # TODO: This global should be pulled in from feedback.py, instead of redeclared
 # here. For now, assert at this value should be the same. 
@@ -77,7 +77,7 @@ def get_worst_chunk_feedback(curr_discrepancy:list):
 def get_best_chunk_feedback(curr_discrepancy:list):
     total = len(curr_discrepancy)
     sharp = curr_discrepancy.count(1) / total
-    on_pitch = curr_discrepancy.count(0) / total
+    on_pitch = ( curr_discrepancy.count(0) / total ) * 100
     flat = curr_discrepancy.count(-1) / total
 
     return f"In your best sung section, you sang on pitch {round(on_pitch,2)}% of the time."
@@ -124,14 +124,20 @@ def get_discrepancy_data(input_json_filepath:str, user_freqs:list):
         if abs_discrepancy > largest_discrepancy:
             largest_discrepancy = abs_discrepancy
             worst_outer_chunk = outer_index
+            worst_outer_chunk_ind2 = user_index
+            worst_outer_chunk_ind1 = worst_outer_chunk_ind2 - len(target_freqs)
             worst_qualitative_feedback = get_worst_chunk_feedback(curr_discrepancy)
+            worst_res = (worst_outer_chunk, worst_outer_chunk_ind1, worst_outer_chunk_ind2, worst_qualitative_feedback)
 
         elif abs_discrepancy < smallest_discrepancy:
             smallest_discrepancy = abs_discrepancy
             best_outer_chunk = outer_index
+            best_outer_chunk_ind2 = user_index
+            best_outer_chunk_ind1 = best_outer_chunk_ind2 - len(target_freqs)
             best_qualitative_feedback = get_best_chunk_feedback(curr_discrepancy)
+            best_res = (best_outer_chunk, best_outer_chunk_ind1, best_outer_chunk_ind2, best_qualitative_feedback)
 
-    return worst_outer_chunk, worst_qualitative_feedback, best_outer_chunk, best_qualitative_feedback
+    return (worst_res, best_res)
 
 
 def json_post_frequency_feedback(input_json_filepath:str, user_freqs:list):
@@ -170,7 +176,7 @@ def json_post_frequency_feedback(input_json_filepath:str, user_freqs:list):
         target_freqs = outer_chunk["target"]
 
         # loop over all the inner frequencies contained in each outer chunk
-        for inner_index in range(len(user_freqs)):
+        for inner_index in range(len(target_freqs)):
             target_freq = target_freqs[inner_index]
             if user_index < len(user_freqs): 
                 user_freq = user_freqs[user_index]

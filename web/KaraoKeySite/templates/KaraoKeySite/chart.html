@@ -27,6 +27,23 @@
 
   <div id="after_feedback" style="display: none;">
     <div>You scored {{ score }}</div>
+
+    <div style="height:450px; margin-top: 100px;">
+
+      <div id = "worstChartDiv" style="float:left;height:300px; width: 700px;">
+        WORST SECTION
+        <canvas id="myWorstChart"></canvas>
+        {{ worst_feedback }}
+      </div>
+    
+      <div id = "bestChartDiv" style="float:right;height:300px; width: 700px;">
+        BEST SECTION
+        <canvas id="myBestChart"></canvas>
+        {{ best_feedback }}
+      </div>
+
+    </div>
+  
     <button class="nice_button">
       <a href="/" id="id_nav_logout" class="header_button, nice_button_text">
         home
@@ -49,6 +66,14 @@
 
   var user_vals = {{ user_vals }}
   var score = {{ score }}
+  var worst_chunk = {{ worst_chunk }}
+  var worst_ind1 = {{ worst_ind1 }}
+  var worst_ind2 = {{ worst_ind2 }}
+  var worst_feedback = "{{ worst_feedback }}";
+  var best_chunk = {{ best_chunk }}
+  var best_ind1 = {{ best_ind1 }}
+  var best_ind2 = {{ best_ind2 }}
+  var best_feedback = "{{ best_feedback }}";
 
   start.onclick = e => {
       startAll()
@@ -84,6 +109,9 @@
 
   var charty;
 
+  var worstCharty;
+  var bestCharty;
+
   function makeChart(xhr) {
     let vals = JSON.parse(xhr.responseText)
     const data = {
@@ -100,7 +128,6 @@
           data: vals["target"],
           fill: false,
           tension: 0.1,
-          // stepped: true,
           borderWidth: 20,
           borderColor: 'rgb(143, 227, 255)',
         },
@@ -170,15 +197,187 @@
       });
   }
 
+  function makeWorstChart(xhr) {
+    let vals = JSON.parse(xhr.responseText)
+    const data = {
+      labels: vals["labels"],
+      datasets: [{
+          data: user_vals.slice(worst_ind1 , worst_ind2),
+          fill: false,
+          tension: 0.1,
+          // stepped: true,
+          borderWidth: 5,
+          borderColor: 'rgb(242, 48, 100)',
+        },
+        {
+          data: vals["all_target_values"][worst_chunk],
+          fill: false,
+          tension: 0.1,
+          borderWidth: 20,
+          borderColor: 'rgb(143, 227, 255)',
+        },
+      ]
+    }
+    var ctx = $("#myWorstChart").get(0).getContext("2d");
+    return new Chart(ctx, {
+        type: 'line', 
+        data: data,
+        options: {
+          elements: {
+              point:{
+                  radius: 0
+              }
+          },
+          events: [],
+          animation: {
+            duration: 0
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            axis: 'x'
+          },
+          plugins: {
+            customCanvasBackgroundColor: {
+              color: 'white',
+            },
+            title: {
+              display: true,
+              text: vals["all_target_lyrics"][worst_chunk],
+              font: {
+                  size: 36,
+                  family: 'Inter'
+              }
+            },
+            chartAreaBorder: {
+              borderColor: 'white',
+              borderWidth: 5
+            },
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                display: false
+              },
+              // max: 15
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                display: false
+              }
+            }
+          }
+        },
+        plugins: [chartAreaBorder, plugin]
+      });
+  }
+
+
+  function makeBestChart(xhr) {
+    let vals = JSON.parse(xhr.responseText)
+    const data = {
+      labels: vals["labels"],
+      datasets: [{
+          data: user_vals.slice(best_ind1 , best_ind2),
+          fill: false,
+          tension: 0.1,
+          // stepped: true,
+          borderWidth: 5,
+          borderColor: 'rgb(242, 48, 100)',
+        },
+        {
+          data: vals["all_target_values"][best_chunk],
+          fill: false,
+          tension: 0.1,
+          borderWidth: 20,
+          borderColor: 'rgb(143, 227, 255)',
+        },
+      ]
+    }
+    var ctx = $("#myBestChart").get(0).getContext("2d");
+    return new Chart(ctx, {
+        type: 'line', 
+        data: data,
+        options: {
+          elements: {
+              point:{
+                  radius: 0
+              }
+          },
+          events: [],
+          animation: {
+            duration: 0
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            axis: 'x'
+          },
+          plugins: {
+            customCanvasBackgroundColor: {
+              color: 'white',
+            },
+            title: {
+              display: true,
+              text: vals["all_target_lyrics"][best_chunk],
+              font: {
+                  size: 36,
+                  family: 'Inter'
+              }
+            },
+            chartAreaBorder: {
+              borderColor: 'white',
+              borderWidth: 5
+            },
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                display: false
+              },
+              // max: 15
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                display: false
+              }
+            }
+          }
+        },
+        plugins: [chartAreaBorder, plugin]
+      });
+  }
+
   let xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function() {
       if (this.readyState != 4) return
       charty = makeChart(xhr);
+      worstCharty = makeWorstChart(xhr);
+      bestCharty = makeBestChart(xhr);
   }
 
   xhr.open("GET", "get-chart-json", true)
   xhr.send()
-
 
   function updateChart(xhr) {
     let vals = JSON.parse(xhr.responseText)
@@ -233,7 +432,8 @@
   function endAll() {
     clearInterval(chartinterval);
     document.getElementById("songbox").style.display = "none"
-    document.getElementById("myChart").style.display = "none"
+    document.getElementById("chartDiv").style.display = "none"
+    document.getElementById("worstChartDiv").style.display = "block"
     document.getElementById("after_feedback").style.display = "block"
 
     let xhr = new XMLHttpRequest()

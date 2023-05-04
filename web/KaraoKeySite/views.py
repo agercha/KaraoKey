@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout
 from KaraoKeySite.Pitch_detection import process_wav_output_pitch, pitch_detect_from_file
-from KaraoKeySite.feedback import feedback_from_res
+# from KaraoKeySite.feedback import feedback_from_res
+from KaraoKeySite.post_song_feedback import json_post_frequency_feedback, get_discrepancy_data
 from KaraoKeySite.forms import *
 from django.core.files.storage import default_storage
 import wave
@@ -47,6 +48,11 @@ def get_chart_json(request):
     response_json = json.load(f)
   global COUNT_OUTER
   global COUNT_INNER
+  all_target = []
+  all_target_lyrics = []
+  for elem in response_json:
+    all_target.append(elem["target"])
+    all_target_lyrics.append(elem["lyrics"])
   curr_vals = response_json[COUNT_OUTER]
   COUNT_INNER += 1
   if COUNT_INNER == curr_vals["length"]:
@@ -59,6 +65,8 @@ def get_chart_json(request):
   l = curr_vals["length"]
   times = [str(i) for i in range(l)]
   curr_vals['labels'] = times
+  curr_vals['all_target_values'] = all_target
+  curr_vals['all_target_lyrics'] = all_target_lyrics
   # curr_vals['user'] = (curr_vals['user'][:COUNT_INNER])
   curr_vals['start_index'] = start_index
   curr_vals['end_index'] = end_index
@@ -81,8 +89,9 @@ def upload(request):
       ogg_f = request.FILES["file"]
       if ogg_f.content_type == 'video/ogg':
         res = pitch_detect_from_file(ogg_f)
-        score = feedback_from_res(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", res)
-        return chart(request, res, score)
+        score = json_post_frequency_feedback(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", res)
+        info = get_discrepancy_data(os.path.abspath(os.getcwd()) + "/KaraoKeySite/static/KaraoKeySite/hbd.json", res)
+        return chart(request, res, score, info)
   else:
       form = RecordingForm()
   return render(request, 'KaraoKeySite/upload.html', {"form": form})
@@ -117,11 +126,24 @@ def mode(request):
 def summary(request):
   return render(request, 'KaraoKeySite/summary.html', {})
 
-def chart(request, user_vals=[], score=0):
+def chart(request, user_vals=[], score=0, info=((0,0,0,""), (0,0,0,""))):
   global COUNT_INNER, COUNT_OUTER
   COUNT_OUTER = 0
   COUNT_INNER = 0
-  return render(request, 'KaraoKeySite/chart.html', {'user_vals':user_vals, 'score':score})
+  (worst_info, best_info) = info
+  (worst, worst_ind1, worst_ind2, worst_str) = worst_info
+  (best, best_ind1, best_ind2, best_str) = best_info
+  context =  {'user_vals':user_vals, 
+              'score':score,
+              'worst_chunk':worst,
+              'worst_ind1':worst_ind1,
+              'worst_ind2':worst_ind2,
+              'worst_feedback':worst_str,
+              'best_chunk':best,
+              'best_ind1':best_ind1,
+              'best_ind2':best_ind2,
+              'best_feedback':best_str}
+  return render(request, 'KaraoKeySite/chart.html', context)
 
 def dummy_chart(request):
   global COUNT_INNER, COUNT_OUTER
