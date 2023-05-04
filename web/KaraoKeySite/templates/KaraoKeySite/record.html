@@ -1,3 +1,4 @@
+
 <!-- from https://github.com/Mido22/MediaRecorder-sample -->
 
 {% extends "KaraoKeySite/base.html" %}
@@ -7,47 +8,368 @@
 {% block page-name %}
 {% endblock %}
 
-{% block page-content %}
-  <h1> MediaRecorder API example</h1>
+{% block js-src %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../../static/KaraoKeySite/chartAJAX.js"></script>
+{% endblock %}
 
+{% block page-content %}
   <div id='selection_area'>
-    <button id='request_button'>Request Stream</button>
+    <button id='request_button' class="nice_button">
+      <div class="nice_button_text">Request Stream</div>
+    </button>
   </div>
+  <audio preload='none' onended ="endAll()" id="songbox" style="display: none;">
+    <source src={{backing}}  type="audio/mp3">
+  </audio>
 
   <div id='buttons_area'>
-    <button id='start' disabled="disabled">start</button>
-    <button id='stop' disabled="disabled">stop</button>
+    <button id='start' class="nice_button" style="display: none">
+      <div class="nice_button_text">
+        start
+      </div>
+    </button>
   </div>
 
-  <div>
-    <ul  id='ul'></ul>
+  <div id="download" style="display: none;">
+    <div>
+      <button class="nice_button">
+        <a id="elem" class="nice_button_text"> </a>
+      </button>
+    </div>
+    <div>
+      <button class="nice_button">
+        <a href="/upload" id="id_nav_logout" class="header_button, nice_button_text">
+          next step
+        </a> 
+      </button>
+    </div>
   </div>
 
-  <div id="result">
-    put pitch here
+  <div style="height:650px">
+    <canvas id="myChart" style="display: none";></canvas>
   </div>
 
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="../../static/KaraoKeySite/record.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+  <!-- <script src="../../static/KaraoKeySite/record.js"></script> -->
 
-  <script>
-    // function loadDoc() {
-    //   var xhttp = new XMLHttpRequest();
-    //   xhttp.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //       document.getElementById("demo").innerHTML =
-    //       this.responseText;
-    //     }
-    //   };
-    //   xhttp.open("GET", "ajax_info.txt", true);
-    //   xhttp.send();
+  <script type="text/javascript">
+    // var song_name = string({{ song_name }})
+
+    function getCSRFToken() {
+      let cookies = document.cookie.split(";")
+      for (let i = 0; i < cookies.length; i++) {
+          let c = cookies[i].trim()
+          if (c.startsWith("csrftoken=")) {
+              return c.substring("csrftoken=".length, c.length)
+          }
+      }
+      return "unknown"
+    }
+
+    let log = console.log.bind(console),
+      id = val => document.getElementById(val),
+      // ul = id('ul'),
+      request_button = id('request_button'),
+      // playbox = id('playbox'),
+      stream,
+      recorder,
+      counter=1,
+      chunks,
+      media;
+
+    request_button.onclick = e => {
+      // playbox.style.display = "block"
+      media = {
+          tag: 'audio',
+          type: 'audio/ogg',
+          ext: '.ogg',
+          selector: {audio: true}
+        };
+
+      navigator.mediaDevices.getUserMedia(media.selector).then(_stream => {
+        stream = _stream;
+        id('selection_area').style.display = 'none';
+        // id('buttons_area').style.display = 'inherit';
+        // start.removeAttribute('disabled');
+        start.style.display = "block"
+        recorder = new MediaRecorder(stream);
+
+        recorder.ondataavailable = e => {
+          chunks.push(e.data);
+
+          // save chunk
+          // change to Blob.slice
+          const full_blob = new Blob(chunks , {type: "audio/ogg"});
+          // const small_blob = full_blob.slice(start=-10)
+          // change filename
+          const full_file = new File( [ full_blob ], "full_file.ogg", { type: "audio/ogg"} );
+          // const small_file = new File( [ small_blob ], "small_file.ogg", { type: "audio/ogg"} );
+
+          let data = new FormData();
+          data.append("csrfmiddlewaretoken", getCSRFToken())
+          data.append("full_recorded_audio", full_file)
+          // data.append("small_recorded_audio", small_file)
+
+          // send request to python
+          let xhr = new XMLHttpRequest()
+          xhr.onreadystatechange = function() {
+              if (this.readyState != 4) return
+              updatePage(xhr) // create this function
+          }
+          xhr.open("POST", "get-pitch", true)
+          xhr.send(data)
+
+          if(recorder.state == 'inactive')  makeLink();
+        };
+
+      }).catch(log);
+
+      // startAll();
+
+    }
+
+    function updatePage(xhr) {
+      if (xhr.status == 200) {
+        let response = JSON.parse(xhr.responseText)
+        processResponse(response)
+        return
+      }
+    }
+
+    function processResponse(response) {
+      // document.getElementById("result").innerHTML = response[0]['curr_pitch']
+    }
+
+    start.onclick = e => {
+      startAll()
+    }
+
+    function startAll () {
+      // start.disabled = true;
+      id('buttons_area').style.display = 'none';
+      document.getElementById('songbox')['play']();
+      document.getElementById("myChart").style.display = "block"
+      chartinterval = window.setInterval(myFunc, 20);
+      // chartinterval = window.setInterval(myFunc, 10000);
+      if (recorder.state == "inactive") {
+        chunks=[];
+        // recorder.start(1000);
+        recorder.start();
+      } else {
+        recorder.resume();
+      }
+    }
+
+
+    // stop.onclick = e => {
+    function endAll() {
+      clearInterval(chartinterval);
+      // stop.disabled = true;
+      document.getElementById("songbox").style.display = "none"
+      document.getElementById("myChart").style.display = "none"
+      recorder.stop();
+      let xhr = new XMLHttpRequest()
+      xhr.open("GET", "restart-chart", true)
+      xhr.send()
+      // start.removeAttribute('disabled');
+    }
+
+    function pauseAll() { 
+      recorder.pause();
+    }
+
+    function makeLink(){
+      let blob = new Blob(chunks, {type: media.type })
+        , url = URL.createObjectURL(blob)
+      ;
+      let res = document.getElementById("download");
+      res.style.display = "block";
+      let elem = document.getElementById("elem");
+      elem.href = url;
+      elem.download = `${counter++}${media.ext}`;
+      elem.innerHTML = "download me!"
+    }
+
+    var chartinterval;
+  
+    const chartAreaBorder = {
+      id: 'chartAreaBorder',
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: {left, top, width, height}} = chart;
+        ctx.save();
+        ctx.strokeStyle = options.borderColor;
+        ctx.lineWidth = options.borderWidth;
+        ctx.setLineDash(options.borderDash || []);
+        ctx.lineDashOffset = options.borderDashOffset;
+        ctx.strokeRect(left, top, width, height);
+        ctx.restore();
+      }
+    };
+  
+    const plugin = {
+      id: 'customCanvasBackgroundColor',
+      beforeDraw: (chart, args, options) => {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = options.color || '#99ffff';
+        ctx.fillRect(0, 0, chart.width, chart.height);
+        ctx.restore();
+      }
+    };
+  
+    var charty;
+  
+    function makeChart(xhr) {
+      let vals = JSON.parse(xhr.responseText)
+      const data = {
+        labels: vals["labels"],
+        datasets: [{
+            data: vals["targetfill"],
+            fill: false,
+            tension: 0.1,
+            borderWidth: 20,
+            borderColor: 'rgb(242, 48, 100)',
+          },
+          {
+            data: vals["target"],
+            fill: false,
+            tension: 0.1,
+            borderWidth: 20,
+            borderColor: 'rgb(143, 227, 255)',
+          },
+        ]
+      }
+      var ctx = $("#myChart").get(0).getContext("2d");
+      return new Chart(ctx, {
+          type: 'line', 
+          data: data,
+          options: {
+            elements: {
+                point:{
+                    radius: 0
+                }
+            },
+            events: [],
+            animation: {
+              duration: 0
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              intersect: false,
+              axis: 'x'
+            },
+            plugins: {
+              customCanvasBackgroundColor: {
+                color: 'white',
+              },
+              title: {
+                display: true,
+                text: vals["lyrics"],
+                font: {
+                    size: 36,
+                    family: 'Inter'
+                }
+              },
+              chartAreaBorder: {
+                borderColor: 'white',
+                borderWidth: 5
+              },
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  display: false
+                },
+                // max: 15
+              },
+              x: {
+                grid: {
+                  display: false
+                },
+                ticks: {
+                  display: false
+                }
+              }
+            }
+          },
+          plugins: [chartAreaBorder, plugin]
+        });
+    }
+  
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return
+        charty = makeChart(xhr);
+    }
+  
+    xhr.open("GET", "get-chart-json", true)
+    xhr.send()
+  
+  
+    function updateChart(xhr) {
+      let vals = JSON.parse(xhr.responseText)
+      const data = {
+        labels: vals["labels"],
+        datasets: [{
+            data: vals["targetfill"],
+            fill: false,
+            tension: 0.1,
+            borderWidth: 20,
+            borderColor: 'rgb(242, 48, 100)',
+          },
+          {
+            data: vals["target"],
+            fill: false,
+            tension: 0.1,
+            borderWidth: 20,
+            borderColor: 'rgb(143, 227, 255)',
+          },
+        ]
+      }
+      charty.data = data;
+      charty.options.plugins.title.text = vals["lyrics"];
+      charty.update();
+    }
+
+    function myFunc() {
+      let xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return
+        updateChart(xhr)
+      }
+      let data = new FormData();
+      xhr.open("POST", "get-target-json", true)
+      data.append("csrfmiddlewaretoken", getCSRFToken())
+      data.append("song_num", {{song_num}})
+      xhr.send(data)
+      // xhr.send()
+  
+    }
+  
+    // function startAll() {
     // }
-    setInterval(sendData(), 1000);
-    //var FileWriter = require('wav').FileWriter;
-
-    // window.onload = sendData;
-    // window.setInterval(sendData, 1000);
+  
+    // function pauseAll() {
+    //   clearInterval(chartinterval);
+    // }
+  
+    // function endAll() {
+    //   clearInterval(chartinterval);
+  
+    //   let xhr = new XMLHttpRequest()
+    //   xhr.open("GET", "restart-chart", true)
+    //   xhr.send()
+    // }
   </script>
 
 {% endblock %}

@@ -1,3 +1,4 @@
+
 {% extends "KaraoKeySite/base.html" %}
 
 {% block title %} KaraoKey {% endblock %}
@@ -12,17 +13,46 @@
 
 {% block page-content %}
 <div id="main">
-  <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
+  <audio preload='none' onended ="endAll()" id="songbox" style="display: none;">
     <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
   </audio>
-  <div style="height:800px">
-    <canvas id="myChart"></canvas>
+
+  <div id='buttons_area'>
+    <button id='start' class="nice_button">
+      <div class="nice_button_text">
+        start
+      </div>
+    </button>
+  </div>
+
+  <div id="after_feedback" style="display: none;">
+    <div>You scored {{ score }}</div>
+    <button class="nice_button">
+      <a href="/" id="id_nav_logout" class="header_button, nice_button_text">
+        home
+      </a> 
+    </button>
   </div>
   
+
+  <!-- <audio controls onplay="startAll()" onended ="endAll()" onpause="pauseAll()" id="songbox">
+    <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
+  </audio> -->
+  <div id = "chartDiv" style="height:650px; display: none;">
+    <canvas id="myChart"></canvas>
+  </div>
 </div>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 <script type="text/javascript">
+
+
+  var user_vals = {{ user_vals }}
+  var score = {{ score }}
+
+  start.onclick = e => {
+      startAll()
+    }
 
   var chartinterval;
 
@@ -59,7 +89,7 @@
     const data = {
       labels: vals["labels"],
       datasets: [{
-          data: vals["user"],
+          data: [],
           fill: false,
           tension: 0.1,
           // stepped: true,
@@ -155,7 +185,7 @@
     const data = {
       labels: vals["labels"],
       datasets: [{
-          data: vals["user"],
+          data: user_vals.slice(vals['start_index'], vals['end_index']),
           fill: false,
           tension: 0.1,
           // stepped: true,
@@ -190,6 +220,9 @@
   }
 
   function startAll() {
+    document.getElementById('chartDiv').style.display = 'block';
+    document.getElementById('buttons_area').style.display = 'none';
+    document.getElementById('songbox')['play']();
     chartinterval = window.setInterval(myFunc, 20);
   }
 
@@ -199,6 +232,9 @@
 
   function endAll() {
     clearInterval(chartinterval);
+    document.getElementById("songbox").style.display = "none"
+    document.getElementById("myChart").style.display = "none"
+    document.getElementById("after_feedback").style.display = "block"
 
     let xhr = new XMLHttpRequest()
     xhr.open("GET", "restart-chart", true)

@@ -7,19 +7,12 @@
 
 {% block page-content %}
 <div id="id_header_div">
-  <div id="id_site_name">
+  <div id="id_site_logo">
     KaraoKey          
   </div>
-  <a href="register" id="id_register_link" class="reg_login">
-      register
-  </a>   
-  <br>     
-  <a href="quick_enter" id="id_quick_enter">
-      quick enter
-  </a>  
 </div>
 <div id="main">
-  <h1 id="id_page_name">LOGIN</h1>
+  <h1 id="reg_login_logo">login</h1>
   <form method="post" action="{% url 'login' %}">
       <table>
           {% for field in form.visible_fields %}
@@ -41,7 +34,8 @@
       </table>
       {% csrf_token %}
       <br>
-      <button type="submit" id="id_login_button">Submit</button>
+        <button type="submit" id="id_register_button" class="reg_login_text">Submit</button>
+        <button onclick="window.location.href='register'" id="id_register_button" class="reg_login_text">Register</a> 
   </form>   
 </div>
 {% endblock %}
