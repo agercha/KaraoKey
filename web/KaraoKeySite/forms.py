@@ -69,7 +69,7 @@ class RegisterForm(forms.Form):
         # dictionary
         return username
     
-
+    
 # https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/
 class RecordingForm(forms.Form):
     file = forms.FileField()

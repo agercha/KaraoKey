@@ -4,9 +4,10 @@
 # Aubio pitch detection on a wav file, integrated with note detection algo
 ################################################################################
 
-import aubio, wave, numpy, time
+import aubio, wave, numpy
 from KaraoKeySite.feedback import *
 from KaraoKeySite.test import debug
+
 from pydub import AudioSegment
 
 
@@ -42,7 +43,7 @@ def pitch_detect_from_file(input_ogg):
         all_pitches.append(pitch)
         total_frames += read
         if read < frames: break
-    
+
     return all_pitches
 
 

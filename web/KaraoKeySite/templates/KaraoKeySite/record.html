@@ -1,3 +1,4 @@
+
 <!-- from https://github.com/Mido22/MediaRecorder-sample -->
 
 {% extends "KaraoKeySite/base.html" %}
@@ -19,7 +20,7 @@
     </button>
   </div>
   <audio preload='none' onended ="endAll()" id="songbox" style="display: none;">
-    <source src="../../static/KaraoKeySite/songs/hbdnovocals.mp3"  type="audio/mp3">
+    <source src={{backing}}  type="audio/mp3">
   </audio>
 
   <div id='buttons_area'>
@@ -50,10 +51,11 @@
   </div>
 
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
   <!-- <script src="../../static/KaraoKeySite/record.js"></script> -->
 
   <script type="text/javascript">
+    // var song_name = string({{ song_name }})
 
     function getCSRFToken() {
       let cookies = document.cookie.split(";")
@@ -150,9 +152,11 @@
       document.getElementById('songbox')['play']();
       document.getElementById("myChart").style.display = "block"
       chartinterval = window.setInterval(myFunc, 20);
+      // chartinterval = window.setInterval(myFunc, 10000);
       if (recorder.state == "inactive") {
         chunks=[];
-        recorder.start(1000);
+        // recorder.start(1000);
+        recorder.start();
       } else {
         recorder.resume();
       }
@@ -336,16 +340,19 @@
       charty.options.plugins.title.text = vals["lyrics"];
       charty.update();
     }
-  
+
     function myFunc() {
       let xhr = new XMLHttpRequest()
       xhr.onreadystatechange = function() {
         if (this.readyState != 4) return
         updateChart(xhr)
       }
-  
-      xhr.open("GET", "get-target-json", true)
-      xhr.send()
+      let data = new FormData();
+      xhr.open("POST", "get-target-json", true)
+      data.append("csrfmiddlewaretoken", getCSRFToken())
+      data.append("song_num", {{song_num}})
+      xhr.send(data)
+      // xhr.send()
   
     }
   

@@ -53,6 +53,8 @@ def test_frequency_feedback():
     user frequencies. 
     '''
 
+    start_time = time.time()
+
     input_file = "/static/KaraoKeySite/dummy_data2.json"
 
     # get current working directory
@@ -78,5 +80,85 @@ def test_frequency_feedback():
             score = get_accuracy_score(target_freq, user_freq)
             total_scores.append(score) # hmmmm...
 
+    duration = time.time() - start_time
+    print(f'duration={duration}')
+
     print(sum(total_scores) / len(total_scores))
     return sum(total_scores) / len(total_scores)
+
+
+def test_note_detection_accuracy():
+    '''
+    Dummy tests for the accuracy algorithm. Reads from dummy_data2's target freqs.
+    '''
+    start_time = time.time()
+
+    input_file = "/static/KaraoKeySite/dummy_data2.json"
+
+    # get current working directory
+    path = os.getcwd()
+    with open(os.path.abspath(os.path.join(path, os.pardir)) + input_file, "r") as f:
+        test_data = json.load(f)
+    
+    count = 0
+    num_outer_chunks = len(test_data)
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(target_freqs)):
+            target_freq = target_freqs[inner_index]
+            note_name, octave_num, _ = frequency_to_note_data(target_freq)
+            print(f'{note_name}{octave_num}')
+            count += 1
+    duration = time.time() - start_time
+    print(duration)
+
+def test_instantaenous_feedback():
+    '''
+    Dummy tests for the feedback algorithm. Reads from dummy_data2's target and 
+    user frequencies. 
+    '''
+
+    input_file = "/static/KaraoKeySite/dummy_data2.json"
+
+    # get current working directory
+    path = os.getcwd()
+    with open(os.path.abspath(os.path.join(path, os.pardir)) + input_file, "r") as f:
+        test_data = json.load(f)
+    
+
+    feedback_dict = \
+        {
+            "feedback" : [],
+            "scores" : []
+        }
+    res = [feedback_dict.copy(), feedback_dict.copy(), feedback_dict.copy(), feedback_dict.copy()]
+
+    num_outer_chunks = len(test_data)
+    # loop over all the partitions of the song
+    for outer_index in range(num_outer_chunks):
+        outer_chunk = test_data[outer_index]
+        # num_inner_chunks = outer_chunk["length"]
+
+        # obtain list of target and user frequencies
+        target_freqs = outer_chunk["target"]
+        user_freqs = outer_chunk["user"]
+
+        # loop over all the inner frequencies contained in each outer chunk
+        for inner_index in range(len(user_freqs)):
+            target_freq = target_freqs[inner_index]
+            user_freq = user_freqs[inner_index]
+            score = get_accuracy_score(target_freq, user_freq)
+            feedback = get_qualitative_feedback(user_freq, target_freq, score)
+            res[outer_index]["feedback"].append(feedback)
+            res[outer_index]["scores"].append(score)
+
+    return res
+
+def demo_feedback():
+    res = test_instantaenous_feedback()
+    res = json.dumps(res)
+    return res
