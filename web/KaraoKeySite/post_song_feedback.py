@@ -82,7 +82,7 @@ def get_best_chunk_feedback(curr_discrepancy:list):
 
     return f"In your best sung section, you sang on pitch {round(on_pitch,2)}% of the time."
 
-def get_discrepancy_data(input_json_filepath:str):
+def get_discrepancy_data(input_json_filepath:str, user_freqs:list):
     # this will probably need to be modified once we actually have the actual
     # file directory.
     with open(input_json_filepath) as f:
@@ -96,7 +96,7 @@ def get_discrepancy_data(input_json_filepath:str):
     smallest_discrepancy = math.inf
     best_qualitative_feedback = ""
     
-    total_scores = []
+    user_index = 0
     num_outer_chunks = len(test_data)
     # loop over all the partitions of the song
     for outer_index in range(num_outer_chunks):
@@ -104,18 +104,21 @@ def get_discrepancy_data(input_json_filepath:str):
 
         # obtain list of target and user frequencies
         target_freqs = outer_chunk["target"]
-        user_freqs = outer_chunk["user"]
 
         # Accumulate inner chunk discrepancy
         curr_discrepancy = []
 
         # loop over all the inner frequencies contained in each outer chunk
-        for inner_index in range(len(user_freqs)):
+        for inner_index in range(len(target_freqs)):
             target_freq = target_freqs[inner_index]
-            user_freq = user_freqs[inner_index]
+            if user_index < len(user_freqs): 
+                user_freq = user_freqs[user_index]
+            else:
+                user_freq = 0
             score = get_accuracy_score(target_freq, user_freq)
             relative = get_sharp_or_flat(user_freq, target_freq, score)
             curr_discrepancy.append(relative)
+            user_index += 1
 
         abs_discrepancy = sum(abs(num) for num in curr_discrepancy)
         if abs_discrepancy > largest_discrepancy:
@@ -131,7 +134,7 @@ def get_discrepancy_data(input_json_filepath:str):
     return worst_outer_chunk, worst_qualitative_feedback, best_outer_chunk, best_qualitative_feedback
 
 
-def json_post_frequency_feedback(input_json_filepath:str):
+def json_post_frequency_feedback(input_json_filepath:str, user_freqs:list):
     '''
     Given an input json file containing 1:1 mappings of user and target\
     frequencies, calculates an accuracy score. 
@@ -156,23 +159,26 @@ def json_post_frequency_feedback(input_json_filepath:str):
     with open(input_json_filepath) as f:
         test_data = json.load(f)
     
+    user_index = 0
     total_scores = []
     num_outer_chunks = len(test_data)
     # loop over all the partitions of the song
     for outer_index in range(num_outer_chunks):
         outer_chunk = test_data[outer_index]
-        # num_inner_chunks = outer_chunk["length"]
 
         # obtain list of target and user frequencies
         target_freqs = outer_chunk["target"]
-        user_freqs = outer_chunk["user"]
 
         # loop over all the inner frequencies contained in each outer chunk
         for inner_index in range(len(user_freqs)):
             target_freq = target_freqs[inner_index]
-            user_freq = user_freqs[inner_index]
+            if user_index < len(user_freqs): 
+                user_freq = user_freqs[user_index]
+            else:
+                user_freq = 0
             score = get_accuracy_score(target_freq, user_freq)
             if (score != 0): total_scores.append(score) # hmmmm...
+            user_index += 1
 
     print(sum(total_scores) / len(total_scores))
     return sum(total_scores) / len(total_scores)
