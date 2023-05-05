@@ -156,8 +156,10 @@ def json_post_frequency_feedback(input_json_filepath:str, user_freqs:list):
             }]
         
     Return value:
-        A comprehensive score ranging from [0, 1] reflecting how accurately the 
-        user was singing to the target frequency.
+        A tuple of:
+           * A comprehensive score ranging from [0, 1] reflecting how accurately the 
+             user was singing to the target frequency.
+           * The result of get_score_ratios
     '''
 
     # this will probably need to be modified once we actually have the actual
@@ -187,4 +189,4 @@ def json_post_frequency_feedback(input_json_filepath:str, user_freqs:list):
             user_index += 1
 
     print(sum(total_scores) / len(total_scores))
-    return sum(total_scores) / len(total_scores)
+    return (sum(total_scores) / len(total_scores), get_score_ratios(total_scores))
