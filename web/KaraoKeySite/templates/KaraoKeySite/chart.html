@@ -26,19 +26,22 @@
   </div>
 
   <div id="after_feedback" style="display: none;">
-    <div>You scored {{ score }}</div>
+    <div>Score: {{ score }}</div>
+    <div>Hits: {{ hits_ratio }}%</div>
+    <div>Near Misses: {{ near_miss_ratio }}%</div>
+    <div>Misses: {{ miss_ratio }}%</div>
 
-    <div style="height:450px; margin-top: 100px;">
+    <div style="height:450px; margin-top: 30px;">
 
       <div id = "worstChartDiv" style="float:left;height:300px; width: 700px;">
         WORST SECTION
-        <canvas id="myWorstChart"></canvas>
+        <canvas id="myWorstChart" style="padding: 10px"></canvas>
         {{ worst_feedback }}
       </div>
     
       <div id = "bestChartDiv" style="float:right;height:300px; width: 700px;">
         BEST SECTION
-        <canvas id="myBestChart"></canvas>
+        <canvas id="myBestChart" style="padding: 10px"></canvas>
         {{ best_feedback }}
       </div>
 

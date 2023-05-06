@@ -126,15 +126,20 @@ def mode(request):
 def summary(request):
   return render(request, 'KaraoKeySite/summary.html', {})
 
-def chart(request, user_vals=[], score=0, info=((0,0,0,""), (0,0,0,""))):
+def chart(request, user_vals=[], score=(0, (0, 0, 0)), info=((0,0,0,""), (0,0,0,""))):
   global COUNT_INNER, COUNT_OUTER
   COUNT_OUTER = 0
   COUNT_INNER = 0
+  (score_val, ratios) = score
+  (hits_ratio, near_miss_ratio, miss_ratio) = ratios
   (worst_info, best_info) = info
   (worst, worst_ind1, worst_ind2, worst_str) = worst_info
   (best, best_ind1, best_ind2, best_str) = best_info
   context =  {'user_vals':user_vals, 
-              'score':score,
+              'score':round(score_val, 2),
+              'hits_ratio':round(hits_ratio*100, 2),
+              'near_miss_ratio':round(near_miss_ratio*100, 2),
+              'miss_ratio':round(miss_ratio*100, 2),
               'worst_chunk':worst,
               'worst_ind1':worst_ind1,
               'worst_ind2':worst_ind2,
