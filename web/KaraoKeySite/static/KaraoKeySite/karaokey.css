@@ -224,3 +224,73 @@ input[type=text], [type=password], [type=email]{
 form{
   display:inline-block;
 }
+
+#score_box{
+  background: #CDFBF8;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  width: 30vw;
+  height: 400px;
+  margin: auto;
+}
+
+#score_category{
+  font-family: SunsetClub; /* download this font */
+  font-style: normal;
+  font-weight: 20;
+  font-size: 100px;
+  color: #e1fffd;;
+  text-shadow: 0 0 10px #00cec1;
+}
+
+#score_text{
+  font-style: normal;
+  font-weight: 20;
+  font-size: 80px;
+  color: #00cec191;
+}
+
+#feedback_category{
+  font-family: SunsetClub;
+  font-style: normal;
+  font-weight: 20;
+  font-size: 60px;
+  color: #e1fffd;;
+  text-shadow: 0 0 5px #00cec1;
+}
+
+#feedback_text{
+    font-style: normal;
+    font-weight: 20;
+    font-size: 40px;
+    color: #00cec161;
+    padding-top: 25px;
+}
+
+#worstChartDiv{
+  color: #FFEAFC;
+  text-shadow: 0 0 10px #FD76E7;
+  background: #FFB0F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  padding-bottom: 80px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 30px;
+}
+
+#bestChartDiv{
+  color: #FFEAFC;
+  text-shadow: 0 0 10px #FD76E7;
+  background: #FFB0F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  padding-bottom: 80px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 30px;
+}
+
+#scoring_feedback_text{
+  font-size:20px;
+}
